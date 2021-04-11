@@ -1934,6 +1934,7 @@ void process_command(command_type cmd, command_type prev_cmd)
         break;
 
         // Action commands.
+    // case EDIT_OPTIONS:          call GUI;                 break;
     case CMD_CAST_SPELL:           do_cast_spell_cmd(false); break;
     case CMD_DISPLAY_SPELLS:       inspect_spells();         break;
     case CMD_FIRE:                 you.quiver_action.target(); break;
