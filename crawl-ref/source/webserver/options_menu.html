@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Options Menu</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="Options Menu for Dungeon Crawl Stone Soup">
+		<meta name="author" content="dragon29708 and SUPAHxHOTxFIRE">
     </head>
 <body>
     <h1>Options Menu</h1>
@@ -8,55 +12,39 @@
         <tr>
             <td>
                 <button value = "0" onclick = "optionClicked(this.value)" id = "menu_commands" style="height:40px;width:80px">Commands</button>
-
             </td>
             <td>
                 <button value = "1" onclick = "optionClicked(this.value)" id = "menu_inscriptions" style="height:40px;width:80px">Inscriptions</button>
-
             </td>
-
         </tr>
         <tr>
             <td>
                 <button value = "2" onclick = "optionClicked(this.value)" id = "menu_interactions" style="height:40px;width:80px">Interactions</button>
-
             </td>
             <td>
                 <button value = "3" onclick = "optionClicked(this.value)" id = "menu_travel" style="height:40px;width:80px">Travel</button>
-
             </td>
-          
         </tr>
         <tr>
             <td>
                 <button value = "4" onclick = "optionClicked(this.value)" id = "menu_visual" style="height:40px;width:80px">Messages</button>
-
             </td>
             <td>
                 <button value = "5" onclick = "optionClicked(this.value)" id = "menu_visual" style="height:40px;width:80px">Visual</button>
-
             </td>
         </tr>
       </table>
-
       <form action="">
-        
         <input type="radio" id="menu_default" name="default" value="1">
         <label for="menu_default">Load Default Settings</label>
         <br>
         <input type="radio" id="menu_visually_impaired" name="default" value="0">
         <label for="menu_visually_impaired">Load Reccomended Settings for Visually Impaired</label>
         <br>
-      
         <input id = "menu_save" type="submit" value="Save">
           <input id = "menu_cancel" type="submit" value="Cancel">
       </form>
-      
-      </body>
-
-          
-          
-        
+      </body>    
 </body>
 <script type="text/javascript" src="options_menu.js">
 </script>
