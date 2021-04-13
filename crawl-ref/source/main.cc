@@ -107,6 +107,7 @@
 #include "nearby-danger.h"
 #include "notes.h"
 #include "options.h"
+#include "options-menu.h"
 #include "output.h"
 #include "player.h"
 #include "player-reacts.h"
