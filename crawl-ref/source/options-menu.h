@@ -6,25 +6,10 @@
 #pragma once
 
 // calls the options menu
-void call_gui() {
-
-  // Will do this
-  
-  return;
-  
-} // call_gui()
-
+void call_gui();
 
 // read from options text file
-bool read_options() {
-
-  return;
-  
-} // read_options()
+bool read_options();
 
 // write to options text file
-bool write_options() {
-
-  return;
-  
-} // write_options()
+bool write_options();
