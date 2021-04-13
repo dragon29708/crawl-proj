@@ -2173,7 +2173,7 @@ void process_command(command_type cmd, command_type prev_cmd)
     }
     
               // Menu command.
-    case CMD_EDIT_OPTIONS:          callGUI();                 break;
+    case CMD_EDIT_OPTIONS:          call_gui();                 break;
       
     case CMD_LUA_CONSOLE:
         debug_terp_dlua(clua);
