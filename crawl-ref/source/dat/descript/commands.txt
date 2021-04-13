@@ -370,3 +370,9 @@ Show keyboard
 CMD_SHOW_KEYBOARD verbose
 
 Brings up the on-screen keyboard, if applicable.
+
+Open options menu
+%%%%
+CMD_EDIT_OPTIONS
+
+Brings up the pop up options menu
