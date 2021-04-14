@@ -4,11 +4,12 @@
 **/
 
 #include "options-menu.h"
+#include "menu.h"
 
 // calls the options menu
 void call_gui() {
 
-  // Will do this
+  UIMenuPopup options_menu;
   
   return;
   
