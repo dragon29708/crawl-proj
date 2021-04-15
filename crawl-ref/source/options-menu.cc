@@ -4,7 +4,6 @@
 **/
 
 #include "options-menu.h"
-#include "menu.h"
 
 // calls the options menu
 void call_gui() {
@@ -23,9 +22,18 @@ bool read_options() {
   
 } // read_options()
 
+
 // write to options text file
 bool write_options() {
 
   return;
   
 } // write_options()
+
+
+// get options and spit some out
+void options_menu(game_options *real_Options) {
+  read_options->show_game_time = true;
+  
+  return;
+}
