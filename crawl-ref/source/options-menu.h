@@ -18,4 +18,4 @@ bool read_options();
 bool write_options();
 
 // get options and spit some out
-void options_menu(game_options *real_Options);
+void options_menu();

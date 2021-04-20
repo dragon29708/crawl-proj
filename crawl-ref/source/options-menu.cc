@@ -8,7 +8,7 @@
 // calls the options menu
 void call_gui() {
 
-  UIMenuPopup options_menu;
+  //UIMenuPopup options_menu;
   
   return;
   
@@ -32,8 +32,7 @@ bool write_options() {
 
 
 // get options and spit some out
-void options_menu(game_options *real_Options) {
-  read_options->show_game_time = true;
-  
+void options_menu() {
+  // nothing
   return;
 }
