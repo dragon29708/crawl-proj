@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include "options.h"
-#include "menu.h"
 
 // calls the options menu
 void call_gui();
