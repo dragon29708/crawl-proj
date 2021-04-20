@@ -1,10 +1,4 @@
-/**
- * @file
- * @brief Functions related to the options menu.
-**/
-
 #pragma once
-
 
 // calls the options menu
 void call_gui();
