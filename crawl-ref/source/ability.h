@@ -3,7 +3,6 @@
  * @brief Functions related to special abilities.
 **/
 
-// test comment
 #pragma once
 
 #include <string>
@@ -22,6 +21,8 @@ struct talent
 };
 
 class dist;
+
+void opt_menu();
 
 skill_type invo_skill(god_type god = you.religion);
 int get_gold_cost(ability_type ability);

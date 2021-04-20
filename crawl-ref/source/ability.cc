@@ -190,7 +190,7 @@ skill_type invo_skill(god_type god)
             return SK_INVOCATIONS;
     }
 }
-
+void opt_menu() {mpr("SHEEESHHHH2"); return;}
 /// How to determine the odds of the ability failing?
 struct failure_info
 {

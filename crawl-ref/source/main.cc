@@ -32,6 +32,7 @@
 #endif
 
 #include "ability.h"
+#include "opt-menu.h"
 #include "abyss.h"
 #include "act-iter.h"
 #include "adjust.h"
@@ -107,7 +108,6 @@
 #include "nearby-danger.h"
 #include "notes.h"
 #include "options.h"
-#include "options-menu.h"
 #include "output.h"
 #include "player.h"
 #include "player-reacts.h"
@@ -2173,8 +2173,10 @@ void process_command(command_type cmd, command_type prev_cmd)
         break;
     }
     
-              // Menu command.
-    case CMD_EDIT_OPTIONS:          options_menu();          break;
+    // Menu command.
+    case CMD_EDIT_OPTIONS:
+        optionsMenu();
+        break;
       
     case CMD_LUA_CONSOLE:
         debug_terp_dlua(clua);
