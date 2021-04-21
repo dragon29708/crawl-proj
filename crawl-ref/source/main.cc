@@ -1804,6 +1804,8 @@ void process_command(command_type cmd, command_type prev_cmd)
     case CMD_EDIT_PLAYER_TILE: tiles.draw_doll_edit(); break;
 #endif
 
+
+      
         // Movement and running commands.
     case CMD_ATTACK_DOWN_LEFT:  _swing_at_target({-1,  1}); break;
     case CMD_ATTACK_DOWN:       _swing_at_target({ 0,  1}); break;
@@ -2169,7 +2171,12 @@ void process_command(command_type cmd, command_type prev_cmd)
             canned_msg(MSG_OK);
         break;
     }
-
+    
+    // Menu command.
+    case CMD_EDIT_OPTIONS:
+        disp_options();
+        break;
+      
     case CMD_LUA_CONSOLE:
         debug_terp_dlua(clua);
         break;

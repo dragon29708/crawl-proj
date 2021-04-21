@@ -5383,3 +5383,50 @@ void menu_sort_condition::set_comparators(string &s)
         cmp,
         s.empty()? "equipped, basename, qualname, curse, qty" : s);
 }
+
+// options menu
+void disp_options() {
+    mpr("Options Menu:");
+
+    // prompt for the user
+    const char * const prompt = "1. Toggle auto switch\n2. Toggle warn hatches\n3. Enable recast spell\n->";
+
+    // user's entered choice
+    int choice = prompt_for_int(prompt, true);
+
+    // process user input
+    switch(choice)
+    {
+        // auto_switch
+        case 1:
+            // toggle option
+            Options.auto_switch = !(Options.auto_switch);
+            // let user know
+            (Options.auto_switch) ? mpr("Auto switch on") : mpr("Auto switch off");
+
+            break;
+        
+        // warn_hatches
+        case 2:
+            // toggle option
+            Options.warn_hatches = !(Options.warn_hatches);
+            // let user know
+            (Options.warn_hatches) ? mpr("Warn hatches on") : mpr("Warn hatches off");
+
+            break;
+        
+        // enable_recast_spell
+        case 3:
+            // toggle option
+            Options.enable_recast_spell = !(Options.enable_recast_spell);
+            // let user know
+            (Options.enable_recast_spell) ? mpr("Recast spell on") : mpr("Recast spell off");
+
+            break;
+        
+        default:
+            // unknown input
+            mpr("Bad input. Try again!");
+    }
+    return;
+}

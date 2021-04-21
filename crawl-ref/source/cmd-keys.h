@@ -37,6 +37,7 @@
 {'y', CMD_MOVE_UP_LEFT},
 // other commands
 {'a', CMD_USE_ABILITY},
+{'e', CMD_EDIT_OPTIONS},
 {'d', CMD_DROP},
 {'f', CMD_FIRE},
 {'g', CMD_PICKUP},

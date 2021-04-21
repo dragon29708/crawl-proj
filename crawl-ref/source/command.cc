@@ -827,8 +827,9 @@ static void _add_formatted_keyhelp(column_composer &cols)
 
     cols.add_formatted(
             1,
-            "<h>Game Saving and Quitting:\n");
+            "<h>Game Options, Saving, and Quitting:\n");
 
+    _add_command(cols, 1, CMD_EDIT_OPTIONS, "Change game options");
     _add_command(cols, 1, CMD_SAVE_GAME, "Save game and exit");
     _add_command(cols, 1, CMD_SAVE_GAME_NOW, "Save and exit without query");
     _add_command(cols, 1, CMD_QUIT, "Abandon the current character");
