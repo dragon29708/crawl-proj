@@ -5386,25 +5386,47 @@ void menu_sort_condition::set_comparators(string &s)
 
 // options menu
 void disp_options() {
-    mpr("OPTIONS MENU");
+    mpr("Options Menu:");
 
-    // auto_switch
-    const char * const prompt
-            = (crawl_should_restart(game_exit::save))
-              ? "auto switch on?"
-              : "auto switch off?";
-        explicit_keymap map;
-        map['S'] = 'y';
-        if (yesno(prompt, true, 'n', true, true, false, &map)) {
-            mpr("Auto switch on");
-            Options.auto_switch = true;
-        }
-        else {
-            Options.auto_switch = false;
-            mpr("Auto switch off");
-        }
-    // warn_hatches
-    // enable_recast_spell
+    // prompt for the user
+    const char * const prompt = "1. Toggle auto switch\n2. Toggle warn hatches\n3. Enable recast spell\n->";
 
+    // user's entered choice
+    int choice = prompt_for_int(prompt, true);
+
+    // process user input
+    switch(choice)
+    {
+        // auto_switch
+        case 1:
+            // toggle option
+            Options.auto_switch = !(Options.auto_switch);
+            // let user know
+            (Options.auto_switch) ? mpr("Auto switch on") : mpr("Auto switch off");
+
+            break;
+        
+        // warn_hatches
+        case 2:
+            // toggle option
+            Options.warn_hatches = !(Options.warn_hatches);
+            // let user know
+            (Options.warn_hatches) ? mpr("Warn hatches on") : mpr("Warn hatches off");
+
+            break;
+        
+        // enable_recast_spell
+        case 3:
+            // toggle option
+            Options.enable_recast_spell = !(Options.enable_recast_spell);
+            // let user know
+            (Options.enable_recast_spell) ? mpr("Recast spell on") : mpr("Recast spell off");
+
+            break;
+        
+        default:
+            // unknown input
+            mpr("Bad input. Try again!");
+    }
     return;
 }
