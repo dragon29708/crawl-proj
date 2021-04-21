@@ -32,7 +32,6 @@
 #endif
 
 #include "ability.h"
-#include "opt-menu.h"
 #include "abyss.h"
 #include "act-iter.h"
 #include "adjust.h"
@@ -2175,7 +2174,7 @@ void process_command(command_type cmd, command_type prev_cmd)
     
     // Menu command.
     case CMD_EDIT_OPTIONS:
-        optionsMenu();
+        disp_options();
         break;
       
     case CMD_LUA_CONSOLE:

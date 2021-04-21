@@ -5383,3 +5383,28 @@ void menu_sort_condition::set_comparators(string &s)
         cmp,
         s.empty()? "equipped, basename, qualname, curse, qty" : s);
 }
+
+// options menu
+void disp_options() {
+    mpr("OPTIONS MENU");
+
+    // auto_switch
+    const char * const prompt
+            = (crawl_should_restart(game_exit::save))
+              ? "auto switch on?"
+              : "auto switch off?";
+        explicit_keymap map;
+        map['S'] = 'y';
+        if (yesno(prompt, true, 'n', true, true, false, &map)) {
+            mpr("Auto switch on");
+            Options.auto_switch = true;
+        }
+        else {
+            Options.auto_switch = false;
+            mpr("Auto switch off");
+        }
+    // warn_hatches
+    // enable_recast_spell
+
+    return;
+}

@@ -125,6 +125,9 @@ enum use_animation_type
 };
 DEF_BITFIELD(use_animations_type, use_animation_type);
 
+// options menu
+void disp_options();
+
 class LineInput;
 class GameOption;
 struct game_options
