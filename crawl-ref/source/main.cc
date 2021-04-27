@@ -2172,9 +2172,11 @@ void process_command(command_type cmd, command_type prev_cmd)
         break;
     }
     
-    // Menu command.
+        // Menu command.
     case CMD_EDIT_OPTIONS:
         disp_options();
+        redraw_screen();
+        update_screen();
         break;
       
     case CMD_LUA_CONSOLE:

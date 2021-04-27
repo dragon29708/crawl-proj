@@ -5384,49 +5384,99 @@ void menu_sort_condition::set_comparators(string &s)
         s.empty()? "equipped, basename, qualname, curse, qty" : s);
 }
 
+
+// utility function for mapping inputs to submenu titles
+int key_to_sub_menu(string key)
+{
+    if (key == "Commands")
+        return 0;
+    else if (key == "Visual")
+        return 1;
+    else if (key == "Travel")
+        return 2;
+    else if (key == "Interactions")
+        return 3;
+    else if (key == "Messages")
+        return 4;
+    else if (key == "Inscriptions")
+        return 5;
+    else
+        return -1;
+} // key_to_sub_menu(string key)
+
+
 // options menu
-void disp_options() {
-    mpr("Options Menu:");
+void disp_options()
+{
+    // sub menus to be displayed
+    map<string, map<int, string> > sub_menus;
+    sub_menus.insert(make_pair("Commands", map<int, string>()));
+    sub_menus.insert(make_pair("Visual", map<int, string>()));
+    sub_menus.insert(make_pair("Travel", map<int, string>()));
+    sub_menus.insert(make_pair("Interactions", map<int, string>()));
+    sub_menus.insert(make_pair("Messages", map<int, string>()));
+    sub_menus.insert(make_pair("Inscriptions", map<int, string>()));
 
-    // prompt for the user
-    const char * const prompt = "1. Toggle auto switch\n2. Toggle warn hatches\n3. Enable recast spell\n->";
-
-    // user's entered choice
-    int choice = prompt_for_int(prompt, true);
-
-    // process user input
-    switch(choice)
+    // if things go wrong
+    if (sub_menus.empty())
     {
-        // auto_switch
-        case 1:
-            // toggle option
-            Options.auto_switch = !(Options.auto_switch);
-            // let user know
-            (Options.auto_switch) ? mpr("Auto switch on") : mpr("Auto switch off");
+        mpr("Sorry. Cannot display options menu!");
+        return;
+    }
 
-            break;
-        
-        // warn_hatches
-        case 2:
-            // toggle option
-            Options.warn_hatches = !(Options.warn_hatches);
-            // let user know
-            (Options.warn_hatches) ? mpr("Warn hatches on") : mpr("Warn hatches off");
+    // make the menu
+    Menu options_menu(MF_SINGLESELECT | MF_ANYPRINTABLE | MF_ALLOW_FORMATTING);
+    // make and set title
+    MenuEntry *title = new MenuEntry("Options Menu");
+    title->colour = YELLOW;
+    options_menu.set_title(title);
 
-            break;
-        
-        // enable_recast_spell
-        case 3:
-            // toggle option
-            Options.enable_recast_spell = !(Options.enable_recast_spell);
-            // let user know
-            (Options.enable_recast_spell) ? mpr("Recast spell on") : mpr("Recast spell off");
+    map<string, map<int, string> >::iterator it;
+    // display submenus
+    int i = 0;
+    for (it = sub_menus.begin(); it != sub_menus.end(); it++, i++)
+    {
+        const char letter = index_to_letter(i);
+        string sub_menu = it->first;
+        trim_string_right(sub_menu);
+        MenuEntry *me = new MenuEntry(sub_menu, MEL_ITEM, 1, letter);
+        me->data = &it->first; // WILL FIX THIS CRAP
+        options_menu.add_entry(me);
+    }
 
-            break;
-        
-        default:
-            // unknown input
-            mpr("Bad input. Try again!");
+    // let user interface with submenus and call submenus when clicked/typed
+    while (true)
+    {
+        // display the menu
+        vector<MenuEntry*> sel = options_menu.show();
+        if (sel.empty())
+            return;
+        else
+        {
+            ASSERT(sel.size() == 1);
+            ASSERT(sel[0]->hotkeys.size() == 1);
+
+            string key = *((string*) sel[0]->data);
+            int index = key_to_sub_menu(key);
+            string answer;
+
+            if (index == -1)
+                answer = "Sorry. Cannot display options submenu!";
+            else
+            {
+                answer = sub_menus[index] + "\n\nSHEESHH";
+            }
+
+            show_description(answer);
+        }
     }
     return;
-}
+    //     // auto_switch
+    //     case 1:
+    //         // toggle option
+    //         Options.auto_switch = !(Options.auto_switch);
+    //         // let user know
+    //         (Options.auto_switch) ? mpr("Auto switch on") : mpr("Auto switch off");
+
+    //         break;
+} // options menu
