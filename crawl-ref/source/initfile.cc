@@ -78,8 +78,6 @@
 #endif
 #include "tiles-build-specific.h"
 
-
-
 // For finding the executable's path
 #ifdef TARGET_OS_WINDOWS
 #define WIN32_LEAN_AND_MEAN
@@ -112,7 +110,7 @@ static bool _first_greater(const pair<int, int> &l, const pair<int, int> &r)
     return l.first > r.first;
 }
 
-const vector<GameOption*> game_options::build_options_list()
+const vector<GameOption *> game_options::build_options_list()
 {
 #ifndef DEBUG
     const bool USING_TOUCH =
@@ -144,8 +142,8 @@ const vector<GameOption*> game_options::build_options_list()
 #endif
 #endif
 
-    #define SIMPLE_NAME(_opt) _opt, {#_opt}
-    vector<GameOption*> options = {
+#define SIMPLE_NAME(_opt) _opt, {#_opt}
+    vector<GameOption *> options = {
         new BoolGameOption(SIMPLE_NAME(autopickup_starting_ammo), true),
         new BoolGameOption(SIMPLE_NAME(easy_door), true),
         new BoolGameOption(SIMPLE_NAME(default_show_all_skills), false),
@@ -154,10 +152,10 @@ const vector<GameOption*> game_options::build_options_list()
         new BoolGameOption(SIMPLE_NAME(suppress_startup_errors), false),
         new BoolGameOption(SIMPLE_NAME(simple_targeting), false),
         new BoolGameOption(easy_quit_item_prompts,
-                           { "easy_quit_item_prompts", "easy_quit_item_lists" },
+                           {"easy_quit_item_prompts", "easy_quit_item_lists"},
                            true),
         new BoolGameOption(easy_unequip,
-                           { "easy_unequip", "easy_armour", "easy_armor" },
+                           {"easy_unequip", "easy_armour", "easy_armor"},
                            true),
         new BoolGameOption(SIMPLE_NAME(equip_unequip), false),
         new BoolGameOption(SIMPLE_NAME(jewellery_prompt), false),
@@ -207,7 +205,7 @@ const vector<GameOption*> game_options::build_options_list()
         new BoolGameOption(SIMPLE_NAME(small_more), false),
         new BoolGameOption(SIMPLE_NAME(pickup_thrown), true),
         new BoolGameOption(SIMPLE_NAME(show_travel_trail), USING_DGL),
-        new BoolGameOption(SIMPLE_NAME(use_fake_cursor), USING_UNIX ),
+        new BoolGameOption(SIMPLE_NAME(use_fake_cursor), USING_UNIX),
         new BoolGameOption(SIMPLE_NAME(use_fake_player_cursor), true),
         new BoolGameOption(SIMPLE_NAME(show_player_species), false),
         new BoolGameOption(SIMPLE_NAME(use_modifier_prefix_keys), true),
@@ -262,10 +260,10 @@ const vector<GameOption*> game_options::build_options_list()
         new IntGameOption(SIMPLE_NAME(autofight_warning), 0, 0, 1000),
         // These need to be odd, hence allow +1.
         new IntGameOption(SIMPLE_NAME(view_max_width),
-                      max(VIEW_BASE_WIDTH, VIEW_MIN_WIDTH),
-                      VIEW_MIN_WIDTH, GXM + 1),
+                          max(VIEW_BASE_WIDTH, VIEW_MIN_WIDTH),
+                          VIEW_MIN_WIDTH, GXM + 1),
         new IntGameOption(SIMPLE_NAME(view_max_height), max(21, VIEW_MIN_HEIGHT),
-                      VIEW_MIN_HEIGHT, GYM + 1),
+                          VIEW_MIN_HEIGHT, GYM + 1),
         new IntGameOption(SIMPLE_NAME(mlist_min_height), 4, 0),
         new IntGameOption(SIMPLE_NAME(msg_min_height), max(7, MSG_MIN_HEIGHT),
                           MSG_MIN_HEIGHT),
@@ -377,11 +375,11 @@ const vector<GameOption*> game_options::build_options_list()
         new TileColGameOption(SIMPLE_NAME(tile_window_col), "#558855"),
         new ListGameOption<string>(SIMPLE_NAME(tile_layout_priority),
 #ifdef TOUCH_UI
-            split_string(",", "minimap, command, inventory, "
-                              "command2, spell, ability, monster")),
+                                   split_string(",", "minimap, command, inventory, "
+                                                     "command2, spell, ability, monster")),
 #else
-            split_string(",", "minimap, inventory, command, "
-                              "spell, ability, monster")),
+                                   split_string(",", "minimap, inventory, command, "
+                                                     "spell, ability, monster")),
 #endif
 #endif
 #ifdef USE_TILE_LOCAL
@@ -428,11 +426,11 @@ const vector<GameOption*> game_options::build_options_list()
     return options;
 }
 
-map<string, GameOption*> game_options::build_options_map(
-    const vector<GameOption*> &options)
+map<string, GameOption *> game_options::build_options_map(
+    const vector<GameOption *> &options)
 {
-    map<string, GameOption*> option_map;
-    for (GameOption* option : options)
+    map<string, GameOption *> option_map;
+    for (GameOption *option : options)
         for (string name : option->getNames())
             option_map[name] = option;
     return option_map;
@@ -460,8 +458,8 @@ object_class_type item_class_by_sym(char32_t c)
     case '!':
         return OBJ_POTIONS;
     case ':':
-    case '+': // ??? -- was the only symbol working for tile order up to 0.10,
-              // so keeping it for compat purposes (user configs).
+    case '+':       // ??? -- was the only symbol working for tile order up to 0.10,
+                    // so keeping it for compat purposes (user configs).
     case U'\x221e': //∞
         return OBJ_BOOKS;
     case '|':
@@ -476,8 +474,8 @@ object_class_type item_class_by_sym(char32_t c)
         return OBJ_CORPSES;
     case '$':
     case U'\x20ac': //€
-    case U'\xa3': //£
-    case U'\xa5': //¥ // FR: support more currencies
+    case U'\xa3':   //£
+    case U'\xa5':   //¥ // FR: support more currencies
         return OBJ_GOLD;
 #if TAG_MAJOR_VERSION == 34
     case '\\': // Compat break: used to be staves (why not '|'?).
@@ -511,14 +509,40 @@ static msg_colour_type _str_to_channel_colour(const string &str)
 }
 
 static const string message_channel_names[] =
-{
-    "plain", "friend_action", "prompt", "god", "duration", "danger", "warning",
-    "recovery", "sound", "talk", "talk_visual", "intrinsic_gain",
-    "mutation", "monster_spell", "monster_enchant", "friend_spell",
-    "friend_enchant", "monster_damage", "monster_target", "banishment",
-    "equipment", "floor", "multiturn", "examine", "examine_filter", "diagnostic",
-    "error", "tutorial", "orb", "timed_portal", "hell_effect", "monster_warning",
-    "dgl_message",
+    {
+        "plain",
+        "friend_action",
+        "prompt",
+        "god",
+        "duration",
+        "danger",
+        "warning",
+        "recovery",
+        "sound",
+        "talk",
+        "talk_visual",
+        "intrinsic_gain",
+        "mutation",
+        "monster_spell",
+        "monster_enchant",
+        "friend_spell",
+        "friend_enchant",
+        "monster_damage",
+        "monster_target",
+        "banishment",
+        "equipment",
+        "floor",
+        "multiturn",
+        "examine",
+        "examine_filter",
+        "diagnostic",
+        "error",
+        "tutorial",
+        "orb",
+        "timed_portal",
+        "hell_effect",
+        "monster_warning",
+        "dgl_message",
 };
 
 // returns -1 if unmatched else returns 0--(NUM_MESSAGE_CHANNELS-1)
@@ -549,7 +573,6 @@ string channel_to_str(int channel)
     return message_channel_names[channel];
 }
 
-
 // The map used to interpret a crawlrc entry as a starting weapon
 // type. For most entries, we can just look up which weapon has the entry as
 // its name; this map contains the exceptions.
@@ -558,25 +581,25 @@ static map<string, weapon_type> _special_weapon_map = {
 
     // "staff" normally refers to a magical staff, but here we want to
     // interpret it as a quarterstaff.
-    {"staff",       WPN_QUARTERSTAFF},
+    {"staff", WPN_QUARTERSTAFF},
 
     // These weapons' base names have changed; we want to interpret the old
     // names correctly.
-    {"sling",       WPN_HUNTING_SLING},
-    {"crossbow",    WPN_HAND_CROSSBOW},
+    {"sling", WPN_HUNTING_SLING},
+    {"crossbow", WPN_HAND_CROSSBOW},
 
     // Pseudo-weapons.
-    {"unarmed",     WPN_UNARMED},
-    {"claws",       WPN_UNARMED},
+    {"unarmed", WPN_UNARMED},
+    {"claws", WPN_UNARMED},
 
-    {"thrown",      WPN_THROWN},
-    {"rocks",       WPN_THROWN},
-    {"boomerangs",   WPN_THROWN},
-    {"javelins",    WPN_THROWN},
+    {"thrown", WPN_THROWN},
+    {"rocks", WPN_THROWN},
+    {"boomerangs", WPN_THROWN},
+    {"javelins", WPN_THROWN},
 
-    {"random",      WPN_RANDOM},
+    {"random", WPN_RANDOM},
 
-    {"viable",      WPN_VIABLE},
+    {"viable", WPN_VIABLE},
 };
 
 /**
@@ -693,7 +716,7 @@ string gametype_to_str(game_type type)
 }
 
 #ifndef DGAMELAUNCH
-static game_type _str_to_gametype(const string& s)
+static game_type _str_to_gametype(const string &s)
 {
     for (int i = 0; i < NUM_GAME_TYPE; ++i)
     {
@@ -778,7 +801,7 @@ job_type str_to_job(const string &str)
 // 0 for true, -1 for false), or a string of the form PREFIX:NUMBER
 // (e.g., auto:7), in which case return NUMBER as an int.
 static int _read_bool_or_number(const string &field, int def_value,
-                                const string& num_prefix)
+                                const string &num_prefix)
 {
     int ret = def_value;
 
@@ -815,7 +838,7 @@ void game_options::str_to_enemy_hp_colour(const string &colours, bool prepend)
 }
 
 #ifdef USE_TILE
-static FixedVector<const char*, TAGPREF_MAX>
+static FixedVector<const char *, TAGPREF_MAX>
     tag_prefs("none", "tutorial", "named", "enemy");
 
 static tag_pref _str_to_tag_pref(const char *opt)
@@ -850,7 +873,7 @@ void game_options::new_dump_fields(const string &text, bool add, bool prepend)
     }
 }
 
-static string _correct_spelling(const string& str)
+static string _correct_spelling(const string &str)
 {
     if (str == "armor_on")
         return "armour_on";
@@ -866,40 +889,40 @@ static string _correct_spelling(const string& str)
 void game_options::set_default_activity_interrupts()
 {
     const char *default_activity_interrupts[] =
-    {
-        "interrupt_armour_on = hp_loss, monster_attack, monster, mimic",
-        "interrupt_armour_off = interrupt_armour_on",
-        "interrupt_drop_item = interrupt_armour_on",
-        "interrupt_jewellery_on = interrupt_armour_on",
-        "interrupt_memorise = hp_loss, monster_attack, stat",
-        "interrupt_butcher = interrupt_armour_on, teleport, stat",
-        "interrupt_exsanguinate = interrupt_butcher",
-        "interrupt_revivify = interrupt_butcher",
-        "interrupt_multidrop = hp_loss, monster_attack, teleport, stat",
-        "interrupt_macro = interrupt_multidrop",
-        "interrupt_travel = interrupt_butcher, hungry, hit_monster, "
-                            "sense_monster",
-        "interrupt_run = interrupt_travel, message",
-        "interrupt_rest = interrupt_run, full_hp, full_mp, ancestor_hp",
+        {
+            "interrupt_armour_on = hp_loss, monster_attack, monster, mimic",
+            "interrupt_armour_off = interrupt_armour_on",
+            "interrupt_drop_item = interrupt_armour_on",
+            "interrupt_jewellery_on = interrupt_armour_on",
+            "interrupt_memorise = hp_loss, monster_attack, stat",
+            "interrupt_butcher = interrupt_armour_on, teleport, stat",
+            "interrupt_exsanguinate = interrupt_butcher",
+            "interrupt_revivify = interrupt_butcher",
+            "interrupt_multidrop = hp_loss, monster_attack, teleport, stat",
+            "interrupt_macro = interrupt_multidrop",
+            "interrupt_travel = interrupt_butcher, hungry, hit_monster, "
+            "sense_monster",
+            "interrupt_run = interrupt_travel, message",
+            "interrupt_rest = interrupt_run, full_hp, full_mp, ancestor_hp",
 
-        // Stair ascents/descents cannot be interrupted except by
-        // teleportation. Attempts to interrupt the delay will just
-        // trash all queued delays, including travel.
-        "interrupt_ascending_stairs = teleport",
-        "interrupt_descending_stairs = teleport",
-        // These are totally uninterruptible by default, since it's
-        // impossible for them to be interrupted anyway.
-        "interrupt_drop_item = ",
-        "interrupt_jewellery_off =",
-    };
+            // Stair ascents/descents cannot be interrupted except by
+            // teleportation. Attempts to interrupt the delay will just
+            // trash all queued delays, including travel.
+            "interrupt_ascending_stairs = teleport",
+            "interrupt_descending_stairs = teleport",
+            // These are totally uninterruptible by default, since it's
+            // impossible for them to be interrupted anyway.
+            "interrupt_drop_item = ",
+            "interrupt_jewellery_off =",
+        };
 
-    for (const char* line : default_activity_interrupts)
+    for (const char *line : default_activity_interrupts)
         read_option_line(line, false);
 }
 
 void game_options::set_activity_interrupt(
-        FixedBitVector<NUM_ACTIVITY_INTERRUPTS> &eints,
-        const string &interrupt)
+    FixedBitVector<NUM_ACTIVITY_INTERRUPTS> &eints,
+    const string &interrupt)
 {
     if (starts_with(interrupt, interrupt_prefix))
     {
@@ -931,7 +954,7 @@ void game_options::set_activity_interrupt(const string &activity_name,
                                           bool remove_interrupts)
 {
     vector<string> interrupts = split_string(",", interrupt_names);
-    auto & eints = activity_interrupts[_correct_spelling(activity_name)];
+    auto &eints = activity_interrupts[_correct_spelling(activity_name)];
 
     if (remove_interrupts)
     {
@@ -1007,12 +1030,12 @@ void game_options::reset_options()
     deleteAll(option_behaviour);
     option_behaviour = build_options_list();
     options_by_name = build_options_map(option_behaviour);
-    for (GameOption* option : option_behaviour)
+    for (GameOption *option : option_behaviour)
         option->reset();
 
-    filename     = "unknown";
+    filename = "unknown";
     basefilename = "unknown";
-    line_num     = -1;
+    line_num = -1;
 
     set_default_activity_interrupts();
 
@@ -1022,9 +1045,9 @@ void game_options::reset_options()
 #ifdef DEBUG_MONSPEAK
     quiet_debug_messages.set(DIAG_SPEECH);
 #endif
-# ifdef DEBUG_MONINDEX
+#ifdef DEBUG_MONINDEX
     quiet_debug_messages.set(DIAG_MONINDEX);
-# endif
+#endif
 #endif
 
     macro_dir = SysEnv.macro_dir;
@@ -1047,7 +1070,7 @@ void game_options::reset_options()
     UNUSED(_resolve_dir);
 
     if (SysEnv.macro_dir.empty())
-        macro_dir  = _get_save_path("");
+        macro_dir = _get_save_path("");
 #endif
 
 #if defined(SHARED_DIR_PATH)
@@ -1062,11 +1085,11 @@ void game_options::reset_options()
     messaging = true;
 #endif
 
-    autopickup_on    = 1;
+    autopickup_on = 1;
 
     game = newgame_def();
 
-    char_set      = CSET_DEFAULT;
+    char_set = CSET_DEFAULT;
 
     incremental_pregen = true;
     pregen_dungeon = false;
@@ -1080,38 +1103,35 @@ void game_options::reset_options()
     autopickups.set(OBJ_JEWELLERY);
     autopickups.set(OBJ_WANDS);
 
-    confirm_butcher        = confirm_butcher_type::normal;
-    easy_confirm           = easy_confirm_type::safe;
-    allow_self_target      = confirm_prompt_type::prompt;
-    skill_focus            = SKM_FOCUS_ON;
+    confirm_butcher = confirm_butcher_type::normal;
+    easy_confirm = easy_confirm_type::safe;
+    allow_self_target = confirm_prompt_type::prompt;
+    skill_focus = SKM_FOCUS_ON;
 
-    user_note_prefix       = "";
+    user_note_prefix = "";
 
-    arena_dump_msgs        = false;
-    arena_dump_msgs_all    = false;
-    arena_list_eq          = false;
+    arena_dump_msgs = false;
+    arena_dump_msgs_all = false;
+    arena_list_eq = false;
 
     // Sort only pickup menus by default.
     sort_menus.clear();
     set_menu_sort("pickup: true");
 
-    assign_item_slot       = SS_FORWARD;
-    show_god_gift          = MB_MAYBE;
+    assign_item_slot = SS_FORWARD;
+    show_god_gift = MB_MAYBE;
 
-    explore_stop           = (ES_ITEM | ES_STAIR | ES_PORTAL | ES_BRANCH
-                              | ES_SHOP | ES_ALTAR | ES_RUNED_DOOR
-                              | ES_TRANSPORTER | ES_GREEDY_PICKUP_SMART
-                              | ES_GREEDY_VISITED_ITEM_STACK);
+    explore_stop = (ES_ITEM | ES_STAIR | ES_PORTAL | ES_BRANCH | ES_SHOP | ES_ALTAR | ES_RUNED_DOOR | ES_TRANSPORTER | ES_GREEDY_PICKUP_SMART | ES_GREEDY_VISITED_ITEM_STACK);
 
-    dump_kill_places       = KDO_ONE_PLACE;
-    dump_item_origins      = IODS_ARTEFACTS;
+    dump_kill_places = KDO_ONE_PLACE;
+    dump_item_origins = IODS_ARTEFACTS;
 
-    flush_input[ FLUSH_ON_FAILURE ]     = true;
-    flush_input[ FLUSH_BEFORE_COMMAND ] = false;
-    flush_input[ FLUSH_ON_MESSAGE ]     = false;
-    flush_input[ FLUSH_LUA ]            = true;
+    flush_input[FLUSH_ON_FAILURE] = true;
+    flush_input[FLUSH_BEFORE_COMMAND] = false;
+    flush_input[FLUSH_ON_MESSAGE] = false;
+    flush_input[FLUSH_LUA] = true;
 
-    fire_items_start       = 0;           // start at slot 'a'
+    fire_items_start = 0; // start at slot 'a'
 
     // Clear fire_order and set up the defaults.
     set_fire_order("launcher, throwing, inscribed, spell, evokable, ability",
@@ -1119,14 +1139,14 @@ void game_options::reset_options()
 
     // TODO: what else?
     force_targeter =
-        { SPELL_HAILSTORM, SPELL_STARBURST, SPELL_FROZEN_RAMPARTS,
-          SPELL_ABSOLUTE_ZERO, SPELL_IGNITION, SPELL_NOXIOUS_BOG };
+        {SPELL_HAILSTORM, SPELL_STARBURST, SPELL_FROZEN_RAMPARTS,
+         SPELL_ABSOLUTE_ZERO, SPELL_IGNITION, SPELL_NOXIOUS_BOG};
     always_use_static_targeters = false;
 
     // These are only used internally, and only from the commandline:
     // XXX: These need a better place.
-    sc_entries             = 0;
-    sc_format              = -1;
+    sc_entries = 0;
+    sc_format = -1;
 
 #ifdef DGAMELAUNCH
     restart_after_game = MB_FALSE;
@@ -1145,12 +1165,12 @@ void game_options::reset_options()
 #ifdef DGAMELAUNCH
     if (wiz_mode != WIZ_NO)
     {
-        wiz_mode         = WIZ_NEVER;
-        explore_mode     = WIZ_NEVER;
+        wiz_mode = WIZ_NEVER;
+        explore_mode = WIZ_NEVER;
     }
 #else
-    wiz_mode             = WIZ_NO;
-    explore_mode         = WIZ_NO;
+    wiz_mode = WIZ_NO;
+    explore_mode = WIZ_NO;
 #endif
 #endif
     terp_files.clear();
@@ -1158,23 +1178,23 @@ void game_options::reset_options()
 #ifdef USE_TILE_LOCAL
 
     // window layout
-    tile_full_screen      = SCREENMODE_AUTO;
+    tile_full_screen = SCREENMODE_AUTO;
     tile_use_small_layout = MB_MAYBE;
 #endif
 
 #ifdef USE_TILE
     // XXX: arena may now be chosen after options are read.
-    tile_tag_pref         = crawl_state.game_is_arena() ? TAGPREF_NAMED
-                                                        : TAGPREF_ENEMY;
+    tile_tag_pref = crawl_state.game_is_arena() ? TAGPREF_NAMED
+                                                : TAGPREF_ENEMY;
 
-    tile_use_monster         = MONS_PROGRAM_BUG;
-    tile_player_tile         = 0;
-    tile_weapon_offsets.first  = INT_MAX;
+    tile_use_monster = MONS_PROGRAM_BUG;
+    tile_player_tile = 0;
+    tile_weapon_offsets.first = INT_MAX;
     tile_weapon_offsets.second = INT_MAX;
-    tile_shield_offsets.first  = INT_MAX;
+    tile_shield_offsets.first = INT_MAX;
     tile_shield_offsets.second = INT_MAX;
     tile_viewport_scale = 100;
-    tile_map_scale      = 60;
+    tile_map_scale = 60;
 #endif
 
 #ifdef USE_TILE_WEB
@@ -1200,9 +1220,7 @@ void game_options::reset_options()
     if (Version::ReleaseType == VER_ALPHA)
         new_dump_fields("turns_by_place");
 
-    use_animations = (UA_BEAM | UA_RANGE | UA_HP | UA_MONSTER_IN_SIGHT
-                      | UA_PICKUP | UA_MONSTER | UA_PLAYER | UA_BRANCH_ENTRY
-                      | UA_ALWAYS_ON);
+    use_animations = (UA_BEAM | UA_RANGE | UA_HP | UA_MONSTER_IN_SIGHT | UA_PICKUP | UA_MONSTER | UA_PLAYER | UA_BRANCH_ENTRY | UA_ALWAYS_ON);
 
     enemy_hp_colour.clear();
     // I think these defaults are pretty ugly but apparently OS X has problems
@@ -1399,7 +1417,7 @@ cglyph_t game_options::parse_mon_glyph(const string &s) const
         if (col != -1)
             md.col = col;
         else
-            md.ch = p == "_"? ' ' : read_symbol(p);
+            md.ch = p == "_" ? ' ' : read_symbol(p);
     }
     return md;
 }
@@ -1422,7 +1440,8 @@ void game_options::remove_mon_glyph_override(const string &text, bool /*prepend*
         matches.insert(m);
     }
     for (monster_type m : matches)
-        mon_glyph_overrides.erase(m);;
+        mon_glyph_overrides.erase(m);
+    ;
 }
 
 void game_options::add_mon_glyph_override(const string &text, bool /*prepend*/)
@@ -1469,8 +1488,7 @@ void game_options::remove_item_glyph_override(const string &text, bool /*prepend
     trim_string(key);
 
     erase_if(item_glyph_overrides,
-             [&key](const item_glyph_override_type& arg)
-             { return key == arg.first; });
+             [&key](const item_glyph_override_type &arg) { return key == arg.first; });
 }
 
 void game_options::add_item_glyph_override(const string &text, bool prepend)
@@ -1485,7 +1503,7 @@ void game_options::add_item_glyph_override(const string &text, bool prepend)
         if (prepend)
         {
             item_glyph_overrides.emplace(item_glyph_overrides.begin(),
-                                               override[0],mdisp);
+                                         override[0], mdisp);
         }
         else
             item_glyph_overrides.emplace_back(override[0], mdisp);
@@ -1497,7 +1515,7 @@ void game_options::remove_feature_override(const string &text, bool /*prepend*/)
     string fname;
     string::size_type epos = text.rfind("}");
     if (epos != string::npos)
-        fname = text.substr(0, text.rfind("{",epos));
+        fname = text.substr(0, text.rfind("{", epos));
     else
         fname = text;
 
@@ -1541,16 +1559,18 @@ void game_options::add_feature_override(const string &text, bool /*prepend*/)
         if (feat >= NUM_FEATURES)
             continue; // TODO: handle other object types.
 
-#define SYM(n, field) if (char32_t s = read_symbol(iprops[n])) \
-                          feature_symbol_overrides[feat][n] = s; \
-                      else \
-                          feature_symbol_overrides[feat][n] = '\0';
+#define SYM(n, field)                          \
+    if (char32_t s = read_symbol(iprops[n]))   \
+        feature_symbol_overrides[feat][n] = s; \
+    else                                       \
+        feature_symbol_overrides[feat][n] = '\0';
         SYM(0, symbol);
         SYM(1, magic_symbol);
 #undef SYM
         feature_def &fov(feature_colour_overrides[feat]);
-#define COL(n, field) if (colour_t c = str_to_colour(iprops[n], BLACK)) \
-                          fov.field = c;
+#define COL(n, field)                                 \
+    if (colour_t c = str_to_colour(iprops[n], BLACK)) \
+        fov.field = c;
         COL(2, dcolour);
         COL(3, unseen_dcolour);
         COL(4, seen_dcolour);
@@ -1567,28 +1587,28 @@ void game_options::add_cset_override(dungeon_char_type dc, int symbol)
 
 string find_crawlrc()
 {
-    const char* locations_data[][2] =
-    {
-        { SysEnv.crawl_dir.c_str(), "init.txt" },
+    const char *locations_data[][2] =
+        {
+            {SysEnv.crawl_dir.c_str(), "init.txt"},
 #ifdef UNIX
-        { SysEnv.home.c_str(), ".crawl/init.txt" },
-        { SysEnv.home.c_str(), ".crawlrc" },
-        { SysEnv.home.c_str(), "init.txt" },
+            {SysEnv.home.c_str(), ".crawl/init.txt"},
+            {SysEnv.home.c_str(), ".crawlrc"},
+            {SysEnv.home.c_str(), "init.txt"},
 #endif
 #ifndef DATA_DIR_PATH
-        { "", "init.txt" },
-        { "..", "init.txt" },
-        { "../settings", "init.txt" },
+            {"", "init.txt"},
+            {"..", "init.txt"},
+            {"../settings", "init.txt"},
 #endif
-        { nullptr, nullptr }                // placeholder to mark end
-    };
+            {nullptr, nullptr} // placeholder to mark end
+        };
 
     // We'll look for these files in any supplied -rcdirs.
     static const char *rc_dir_filenames[] =
-    {
-        ".crawlrc",
-        "init.txt",
-    };
+        {
+            ".crawlrc",
+            "init.txt",
+        };
 
     // -rc option always wins.
     if (!SysEnv.crawl_rc.empty())
@@ -1624,24 +1644,24 @@ string find_crawlrc()
     return datafile_path("init.txt", false, false);
 }
 
-static const char* lua_builtins[] =
-{
-    "clua/stash.lua",
-    "clua/delays.lua",
-    "clua/autofight.lua",
-    "clua/automagic.lua",
-    "clua/kills.lua",
+static const char *lua_builtins[] =
+    {
+        "clua/stash.lua",
+        "clua/delays.lua",
+        "clua/autofight.lua",
+        "clua/automagic.lua",
+        "clua/kills.lua",
 };
 
-static const char* config_defaults[] =
-{
-    "defaults/autopickup_exceptions.txt",
-    "defaults/runrest_messages.txt",
-    "defaults/standard_colours.txt",
-    "defaults/menu_colours.txt",
-    "defaults/glyph_colours.txt",
-    "defaults/messages.txt",
-    "defaults/misc.txt",
+static const char *config_defaults[] =
+    {
+        "defaults/autopickup_exceptions.txt",
+        "defaults/runrest_messages.txt",
+        "defaults/standard_colours.txt",
+        "defaults/menu_colours.txt",
+        "defaults/glyph_colours.txt",
+        "defaults/messages.txt",
+        "defaults/misc.txt",
 };
 
 void read_init_file(bool runscript)
@@ -1665,9 +1685,9 @@ void read_init_file(bool runscript)
         Options.include(datafile_path(def_file), false, runscript);
 
     // Load early binding extra options from the command line BEFORE init.txt.
-    Options.filename     = "extra opts first";
+    Options.filename = "extra opts first";
     Options.basefilename = "extra opts first";
-    Options.line_num     = 0;
+    Options.line_num = 0;
     for (const string &extra : SysEnv.extra_opts_first)
     {
         Options.line_num++;
@@ -1726,18 +1746,18 @@ void read_init_file(bool runscript)
     }
 
     // Load late binding extra options from the command line AFTER init.txt.
-    Options.filename     = "extra opts last";
+    Options.filename = "extra opts last";
     Options.basefilename = "extra opts last";
-    Options.line_num     = 0;
+    Options.line_num = 0;
     for (const string &extra : SysEnv.extra_opts_last)
     {
         Options.line_num++;
         Options.read_option_line(extra, true);
     }
 
-    Options.filename     = init_file_name;
+    Options.filename = init_file_name;
     Options.basefilename = get_base_filename(init_file_name);
-    Options.line_num     = -1;
+    Options.line_num = -1;
 }
 
 newgame_def read_startup_prefs()
@@ -1765,7 +1785,7 @@ newgame_def read_startup_prefs()
 }
 
 #ifndef DISABLE_STICKY_STARTUP_OPTIONS
-static void write_newgame_options(const newgame_def& prefs, FILE *f)
+static void write_newgame_options(const newgame_def &prefs, FILE *f)
 {
     if (Options.no_save)
         return;
@@ -1788,7 +1808,7 @@ static void write_newgame_options(const newgame_def& prefs, FILE *f)
 }
 #endif // !DISABLE_STICKY_STARTUP_OPTIONS
 
-void write_newgame_options_file(const newgame_def& prefs)
+void write_newgame_options_file(const newgame_def &prefs)
 {
 #ifndef DISABLE_STICKY_STARTUP_OPTIONS
     // [ds] Saving startup prefs should work like this:
@@ -1860,7 +1880,7 @@ void read_options(const string &s, bool runscript, bool clear_aliases)
 
 game_options::game_options()
     : seed(0), seed_from_rc(0),
-    no_save(false), language(lang_t::EN), lang_name(nullptr)
+      no_save(false), language(lang_t::EN), lang_name(nullptr)
 {
     reset_options();
 }
@@ -1876,10 +1896,10 @@ void game_options::read_options(LineInput &il, bool runscript,
     unsigned int line = 0;
 
     bool inscriptblock = false;
-    bool inscriptcond  = false;
+    bool inscriptcond = false;
     bool isconditional = false;
 
-    bool l_init        = false;
+    bool l_init = false;
 
     if (clear_aliases)
     {
@@ -1897,7 +1917,7 @@ void game_options::read_options(LineInput &il, bool runscript,
     while (!il.eof())
     {
         line_num++;
-        string s   = il.get_line();
+        string s = il.get_line();
         string str = s;
         line++;
 
@@ -1928,7 +1948,7 @@ void game_options::read_options(LineInput &il, bool runscript,
         {
             // The init file is now forced into isconditional mode.
             isconditional = true;
-            inscriptcond  = true;
+            inscriptcond = true;
 
             str = str.substr(starts_with(str, "L<") ? 2 : 1);
             // Is this a one-liner?
@@ -1950,8 +1970,7 @@ void game_options::read_options(LineInput &il, bool runscript,
             }
             continue;
         }
-        else if (inscriptcond && !str.empty()
-                 && (str.find(">") == str.length() - 1 || str == ">L"))
+        else if (inscriptcond && !str.empty() && (str.find(">") == str.length() - 1 || str == ">L"))
         {
             inscriptcond = false;
             str = str.substr(0, str.length() - 1);
@@ -1967,8 +1986,7 @@ void game_options::read_options(LineInput &il, bool runscript,
         }
 
         // Handle blocks of Lua
-        if (!inscriptblock
-            && (starts_with(str, "Lua{") || starts_with(str, "{")))
+        if (!inscriptblock && (starts_with(str, "Lua{") || starts_with(str, "{")))
         {
             inscriptblock = true;
             luacode.clear();
@@ -2064,7 +2082,6 @@ void game_options::read_options(LineInput &il, bool runscript,
         }
 #endif
     }
-
 }
 
 void game_options::fixup_options()
@@ -2083,11 +2100,11 @@ void game_options::fixup_options()
 static int _str_to_killcategory(const string &s)
 {
     static const char *kc[] =
-    {
-        "you",
-        "friend",
-        "other",
-    };
+        {
+            "you",
+            "friend",
+            "other",
+        };
 
     for (unsigned i = 0; i < ARRAYSZ(kc); ++i)
         if (s == kc[i])
@@ -2124,14 +2141,14 @@ void game_options::set_player_tile(const string &field)
             size_t found = base_tname.rfind('_');
             int offset = 0;
             tileidx_t base_tile = 0;
-            if (found != std::string::npos
-                && parse_int(fields[1].substr(found + 1).c_str(), offset))
+            if (found != std::string::npos && parse_int(fields[1].substr(found + 1).c_str(), offset))
             {
                 base_tname = base_tname.substr(0, found);
                 if (!tile_player_index(base_tname.c_str(), &base_tile))
                 {
                     report_error("Can't find base tile \"%s\" of variant "
-                                 "tile \"%s\"", base_tname.c_str(),
+                                 "tile \"%s\"",
+                                 base_tname.c_str(),
                                  fields[1].c_str());
                     return;
                 }
@@ -2181,11 +2198,7 @@ void game_options::set_tile_offsets(const string &field, bool set_shield)
     }
 
     vector<string> offs = split_string(",", field);
-    if (offs.size() != 2
-        || !parse_int(offs[0].c_str(), offsets->first)
-        || abs(offsets->first) > 32
-        || !parse_int(offs[1].c_str(), offsets->second)
-        || abs(offsets->second) > 32)
+    if (offs.size() != 2 || !parse_int(offs[0].c_str(), offsets->first) || abs(offsets->first) > 32 || !parse_int(offs[1].c_str(), offsets->second) || abs(offsets->second) > 32)
     {
         report_error("Invalid %s tile offsets: \"%s\"",
                      set_shield ? "shield" : "weapon", field.c_str());
@@ -2203,7 +2216,7 @@ void game_options::set_tile_offsets(const string &field, bool set_shield)
 void game_options::do_kill_map(const string &from, const string &to)
 {
     int ifrom = _str_to_killcategory(from),
-        ito   = _str_to_killcategory(to);
+        ito = _str_to_killcategory(to);
     if (ifrom != -1 && ito != -1)
         kill_map[ifrom] = ito;
 }
@@ -2270,11 +2283,9 @@ int game_options::read_explore_stop_conditions(const string &field) const
             conditions |= ES_GREEDY_ITEM;
         else if (c == "greedy_visited_item_stack")
             conditions |= ES_GREEDY_VISITED_ITEM_STACK;
-        else if (c == "glowing" || c == "glowing_item"
-                 || c == "glowing_items")
+        else if (c == "glowing" || c == "glowing_item" || c == "glowing_items")
             conditions |= ES_GLOWING_ITEM;
-        else if (c == "artefact" || c == "artefacts"
-                 || c == "artifact" || c == "artifacts")
+        else if (c == "artefact" || c == "artefacts" || c == "artifact" || c == "artifacts")
             conditions |= ES_ARTEFACT;
         else if (c == "rune" || c == "runes")
             conditions |= ES_RUNE;
@@ -2404,7 +2415,7 @@ void game_options::add_message_colour_mapping(const string &field,
     else
         mcol = msg_colour(col);
 
-    message_colour_mapping m = { parse_message_filter(cmap[1]), mcol };
+    message_colour_mapping m = {parse_message_filter(cmap[1]), mcol};
     if (subtract)
         remove_matching(message_colour_mappings, m);
     else if (prepend)
@@ -2431,7 +2442,7 @@ void game_options::set_menu_sort(string field)
         if (m_cond.mtype == cond.mtype)
         {
             m_cond.sort = cond.sort;
-            m_cond.cmp  = cond.cmp;
+            m_cond.cmp = cond.cmp;
             return;
         }
 
@@ -2447,12 +2458,12 @@ void game_options::split_parse(const string &s, const string &separator,
     const vector<string> defs = split_string(separator, s);
     if (prepend)
     {
-        for ( auto it = defs.rbegin() ; it != defs.rend(); ++it)
+        for (auto it = defs.rbegin(); it != defs.rend(); ++it)
             (this->*add)(*it, prepend);
     }
     else
     {
-        for ( auto it = defs.begin() ; it != defs.end(); ++it)
+        for (auto it = defs.begin(); it != defs.end(); ++it)
             (this->*add)(*it, prepend);
     }
 }
@@ -2483,11 +2494,9 @@ void game_options::set_option_fragment(const string &s, bool /*prepend*/)
 static void _bindkey(string field)
 {
     const size_t start_bracket = field.find_first_of('[');
-    const size_t end_bracket   = field.find_last_of(']');
+    const size_t end_bracket = field.find_last_of(']');
 
-    if (start_bracket == string::npos
-        || end_bracket == string::npos
-        || start_bracket > end_bracket)
+    if (start_bracket == string::npos || end_bracket == string::npos || start_bracket > end_bracket)
     {
         mprf(MSGCH_ERROR, "Bad bindkey bracketing in '%s'",
              field.c_str());
@@ -2536,7 +2545,7 @@ static void _bindkey(string field)
         if (ks.size() != 1)
         {
             mprf(MSGCH_ERROR, "Invalid keyseq '%s' in bindkey directive '%s'",
-                key_str.c_str(), field.c_str());
+                 key_str.c_str(), field.c_str());
         }
         key = ks[0];
     }
@@ -2555,8 +2564,8 @@ static void _bindkey(string field)
         return;
     }
 
-    const string       name = field.substr(start_name);
-    const command_type cmd  = name_to_command(name);
+    const string name = field.substr(start_name);
+    const command_type cmd = name_to_command(name);
     if (cmd == CMD_NO_CMD)
     {
         mprf(MSGCH_ERROR, "No command named '%s'", name.c_str());
@@ -2573,25 +2582,25 @@ static bool _is_autopickup_ban(pair<text_pattern, bool> entry)
 
 void game_options::read_option_line(const string &str, bool runscript)
 {
-#define NEWGAME_OPTION(_opt, _conv, _type)                                     \
-    if (plain)                                                                 \
-        _opt.clear();                                                          \
-    for (const auto &part : split_string(",", field))                          \
-    {                                                                          \
-        if (minus_equal)                                                       \
-        {                                                                      \
-            auto it2 = find(_opt.begin(), _opt.end(), _conv(part));            \
-            if (it2 != _opt.end())                                             \
-                _opt.erase(it2);                                               \
-        }                                                                      \
-        else                                                                   \
-            _opt.push_back(_conv(part));                                       \
+#define NEWGAME_OPTION(_opt, _conv, _type)                          \
+    if (plain)                                                      \
+        _opt.clear();                                               \
+    for (const auto &part : split_string(",", field))               \
+    {                                                               \
+        if (minus_equal)                                            \
+        {                                                           \
+            auto it2 = find(_opt.begin(), _opt.end(), _conv(part)); \
+            if (it2 != _opt.end())                                  \
+                _opt.erase(it2);                                    \
+        }                                                           \
+        else                                                        \
+            _opt.push_back(_conv(part));                            \
     }
-    string key    = "";
+    string key = "";
     string subkey = "";
-    string field  = "";
+    string field = "";
 
-    bool plus_equal  = false;
+    bool plus_equal = false;
     bool caret_equal = false;
     bool minus_equal = false;
     rc_line_type line_type = RCFILE_LINE_EQUALS;
@@ -2646,13 +2655,13 @@ void game_options::read_option_line(const string &str, bool runscript)
     const string::size_type first_dot = prequal.find('.');
     if (first_dot != string::npos)
     {
-        key    = prequal.substr(0, first_dot);
+        key = prequal.substr(0, first_dot);
         subkey = prequal.substr(first_dot + 1);
     }
     else
     {
         // no subkey (dots are okay in value field)
-        key    = prequal;
+        key = prequal;
     }
 
     // Clean up our data...
@@ -2665,33 +2674,8 @@ void game_options::read_option_line(const string &str, bool runscript)
     // Keep unlowercased field around
     const string orig_field = field;
 
-    if (key != "name" && key != "crawl_dir" && key != "macro_dir"
-        && key != "combo"
-        && key != "species" && key != "background" && key != "job"
-        && key != "race" && key != "class" && key != "ban_pickup"
-        && key != "autopickup_exceptions"
-        && key != "explore_stop_pickup_ignore"
-        && key != "stop_travel"
-        && key != "force_more_message"
-        && key != "flash_screen_message"
-        && key != "confirm_action"
-        && key != "drop_filter" && key != "lua_file" && key != "terp_file"
-        && key != "note_items" && key != "autoinscribe"
-        && key != "note_monsters" && key != "note_messages"
-        && key != "display_char" && !starts_with(key, "cset") // compatibility
-        && key != "dungeon" && key != "feature"
-        && key != "mon_glyph" && key != "item_glyph"
-        && key != "fire_items_start"
-        && key != "opt" && key != "option"
-        && key != "menu_colour" && key != "menu_color"
-        && key != "message_colour" && key != "message_color"
-        && key != "levels" && key != "level" && key != "entries"
-        && key != "include" && key != "bindkey"
-        && key != "spell_slot"
-        && key != "item_slot"
-        && key != "ability_slot"
-        && key != "sound" && key != "hold_sound" && key != "sound_file_path"
-        && key.find("font") == string::npos)
+    if (key != "name" && key != "crawl_dir" && key != "macro_dir" && key != "combo" && key != "species" && key != "background" && key != "job" && key != "race" && key != "class" && key != "ban_pickup" && key != "autopickup_exceptions" && key != "explore_stop_pickup_ignore" && key != "stop_travel" && key != "force_more_message" && key != "flash_screen_message" && key != "confirm_action" && key != "drop_filter" && key != "lua_file" && key != "terp_file" && key != "note_items" && key != "autoinscribe" && key != "note_monsters" && key != "note_messages" && key != "display_char" && !starts_with(key, "cset") // compatibility
+        && key != "dungeon" && key != "feature" && key != "mon_glyph" && key != "item_glyph" && key != "fire_items_start" && key != "opt" && key != "option" && key != "menu_colour" && key != "menu_color" && key != "message_colour" && key != "message_color" && key != "levels" && key != "level" && key != "entries" && key != "include" && key != "bindkey" && key != "spell_slot" && key != "item_slot" && key != "ability_slot" && key != "sound" && key != "hold_sound" && key != "sound_file_path" && key.find("font") == string::npos)
     {
         lowercase(field);
     }
@@ -2713,7 +2697,7 @@ void game_options::read_option_line(const string &str, bool runscript)
         autopickups.reset();
 
         char32_t c;
-        for (const char* tp = field.c_str(); int s = utf8towc(&c, tp); tp += s)
+        for (const char *tp = field.c_str(); int s = utf8towc(&c, tp); tp += s)
         {
             object_class_type type = item_class_by_sym(c);
 
@@ -2799,7 +2783,7 @@ void game_options::read_option_line(const string &str, bool runscript)
         terp_files.push_back(field);
     else if (key == "colour" || key == "color")
     {
-        const int orig_col   = str_to_colour(subkey);
+        const int orig_col = str_to_colour(subkey);
         const int result_col = str_to_colour(field);
 
         if (orig_col != -1 && result_col != -1)
@@ -2807,13 +2791,13 @@ void game_options::read_option_line(const string &str, bool runscript)
         else
         {
             report_error("Bad colour -- %s=%d or %s=%d\n",
-                     subkey.c_str(), orig_col, field.c_str(), result_col);
+                         subkey.c_str(), orig_col, field.c_str(), result_col);
         }
     }
     else if (key == "channel")
     {
         const int chnl = str_to_channel(subkey);
-        const msg_colour_type col  = _str_to_channel_colour(field);
+        const msg_colour_type col = _str_to_channel_colour(field);
 
         if (chnl != -1 && col != MSGCOL_NONE)
             channels[chnl] = col;
@@ -2840,8 +2824,7 @@ void game_options::read_option_line(const string &str, bool runscript)
                                plus_equal || caret_equal,
                                minus_equal);
     }
-    else if (key == "display_char"
-             || starts_with(key, "cset")) // compatibility with old rcfiles
+    else if (key == "display_char" || starts_with(key, "cset")) // compatibility with old rcfiles
     {
         for (const string &over : split_string(",", field))
         {
@@ -2859,7 +2842,7 @@ void game_options::read_option_line(const string &str, bool runscript)
     else if (key == "feature" || key == "dungeon")
     {
         if (plain)
-           clear_feature_overrides();
+            clear_feature_overrides();
 
         if (minus_equal)
             split_parse(field, ";", &game_options::remove_feature_override);
@@ -2869,7 +2852,7 @@ void game_options::read_option_line(const string &str, bool runscript)
     else if (key == "mon_glyph")
     {
         if (plain)
-           mon_glyph_overrides.clear();
+            mon_glyph_overrides.clear();
 
         if (minus_equal)
             split_parse(field, ",", &game_options::remove_mon_glyph_override);
@@ -2964,7 +2947,7 @@ void game_options::read_option_line(const string &str, bool runscript)
     else if (key == "fire_order")
         set_fire_order(field, plus_equal, caret_equal);
 #ifndef DGAMELAUNCH
-    // If DATA_DIR_PATH is set, don't set crawl_dir from .crawlrc.
+        // If DATA_DIR_PATH is set, don't set crawl_dir from .crawlrc.
 #ifndef DATA_DIR_PATH
     else if (key == "crawl_dir")
     {
@@ -3006,30 +2989,26 @@ void game_options::read_option_line(const string &str, bool runscript)
     {
         if (subkey == "failure")
         {
-            flush_input[FLUSH_ON_FAILURE]
-                = read_bool(field, flush_input[FLUSH_ON_FAILURE]);
+            flush_input[FLUSH_ON_FAILURE] = read_bool(field, flush_input[FLUSH_ON_FAILURE]);
         }
         else if (subkey == "command")
         {
-            flush_input[FLUSH_BEFORE_COMMAND]
-                = read_bool(field, flush_input[FLUSH_BEFORE_COMMAND]);
+            flush_input[FLUSH_BEFORE_COMMAND] = read_bool(field, flush_input[FLUSH_BEFORE_COMMAND]);
         }
         else if (subkey == "message")
         {
-            flush_input[FLUSH_ON_MESSAGE]
-                = read_bool(field, flush_input[FLUSH_ON_MESSAGE]);
+            flush_input[FLUSH_ON_MESSAGE] = read_bool(field, flush_input[FLUSH_ON_MESSAGE]);
         }
         else if (subkey == "lua")
         {
-            flush_input[FLUSH_LUA]
-                = read_bool(field, flush_input[FLUSH_LUA]);
+            flush_input[FLUSH_LUA] = read_bool(field, flush_input[FLUSH_LUA]);
         }
     }
     else if (key == "wiz_mode")
     {
         // wiz_mode is recognised as a legal key in all compiles -- bwr
 #ifdef WIZARD
-    #ifndef DGAMELAUNCH
+#ifndef DGAMELAUNCH
         if (field == "never")
             wiz_mode = WIZ_NEVER;
         else if (field == "no")
@@ -3038,13 +3017,13 @@ void game_options::read_option_line(const string &str, bool runscript)
             wiz_mode = WIZ_YES;
         else
             report_error("Unknown wiz_mode option: %s\n", field.c_str());
-    #endif
+#endif
 #endif
     }
     else if (key == "explore_mode")
     {
 #ifdef WIZARD
-    #ifndef DGAMELAUNCH
+#ifndef DGAMELAUNCH
         if (field == "never")
             explore_mode = WIZ_NEVER;
         else if (field == "no")
@@ -3053,7 +3032,7 @@ void game_options::read_option_line(const string &str, bool runscript)
             explore_mode = WIZ_YES;
         else
             report_error("Unknown explore_mode option: %s\n", field.c_str());
-    #endif
+#endif
 #endif
     }
     else if (key == "ban_pickup")
@@ -3062,7 +3041,7 @@ void game_options::read_option_line(const string &str, bool runscript)
         if (plain)
             erase_if(force_autopickup, _is_autopickup_ban);
 
-        vector<pair<text_pattern, bool> > new_entries;
+        vector<pair<text_pattern, bool>> new_entries;
         for (const string &s : split_string(",", field))
         {
             if (s.empty())
@@ -3082,7 +3061,7 @@ void game_options::read_option_line(const string &str, bool runscript)
         if (plain)
             force_autopickup.clear();
 
-        vector<pair<text_pattern, bool> > new_entries;
+        vector<pair<text_pattern, bool>> new_entries;
         for (const string &s : split_string(",", field))
         {
             if (s.empty())
@@ -3109,17 +3088,18 @@ void game_options::read_option_line(const string &str, bool runscript)
     else
 #endif
 
-    if (key == "autoinscribe")
+        if (key == "autoinscribe")
     {
         if (plain)
             autoinscriptions.clear();
 
         const size_t first = field.find_first_of(':');
-        const size_t last  = field.find_last_of(':');
+        const size_t last = field.find_last_of(':');
         if (first == string::npos || first != last)
         {
             return report_error("Autoinscribe string must have exactly "
-                                "one colon: %s\n", field.c_str());
+                                "one colon: %s\n",
+                                field.c_str());
         }
 
         if (first == 0)
@@ -3143,7 +3123,7 @@ void game_options::read_option_line(const string &str, bool runscript)
             return;
         }
 
-        pair<text_pattern,string> entry(thesplit[0], thesplit[1]);
+        pair<text_pattern, string> entry(thesplit[0], thesplit[1]);
 
         if (minus_equal)
             remove_matching(autoinscriptions, entry);
@@ -3168,9 +3148,7 @@ void game_options::read_option_line(const string &str, bool runscript)
         {
             vector<string> insplit = split_string(":", thesplit[i]);
 
-            if (insplit.empty() || insplit.size() > 2
-                 || insplit.size() == 1 && !minus_equal
-                 || insplit.size() == 2 && minus_equal)
+            if (insplit.empty() || insplit.size() > 2 || insplit.size() == 1 && !minus_equal || insplit.size() == 2 && minus_equal)
             {
                 report_error("Bad monster_list_colour string: %s\n",
                              field.c_str());
@@ -3230,14 +3208,12 @@ void game_options::read_option_line(const string &str, bool runscript)
                 split_parse(field, ",", &game_options::add_force_targeter);
         }
     }
-    else if (key == "spell_slot"
-             || key == "item_slot"
-             || key == "ability_slot")
+    else if (key == "spell_slot" || key == "item_slot" || key == "ability_slot")
 
     {
-        auto& auto_letters = (key == "item_slot"  ? auto_item_letters
-                           : (key == "spell_slot" ? auto_spell_letters
-                                                  : auto_ability_letters));
+        auto &auto_letters = (key == "item_slot" ? auto_item_letters
+                                                 : (key == "spell_slot" ? auto_spell_letters
+                                                                        : auto_ability_letters));
         if (plain)
             auto_letters.clear();
 
@@ -3247,8 +3223,8 @@ void game_options::read_option_line(const string &str, bool runscript)
             return report_error("Error parsing %s string: %s\n",
                                 key.c_str(), field.c_str());
         }
-        pair<text_pattern,string> entry(text_pattern(thesplit[0], true),
-                                        thesplit[1]);
+        pair<text_pattern, string> entry(text_pattern(thesplit[0], true),
+                                         thesplit[1]);
 
         if (minus_equal)
             remove_matching(auto_letters, entry);
@@ -3344,7 +3320,7 @@ void game_options::read_option_line(const string &str, bool runscript)
     // MSVC has a limit on how many if/else if can be chained together.
     else
 #endif
-    if (key == "menu_colour" || key == "menu_color")
+        if (key == "menu_colour" || key == "menu_color")
     {
         if (plain)
             menu_colour_mappings.clear();
@@ -3371,7 +3347,7 @@ void game_options::read_option_line(const string &str, bool runscript)
             }
 
             colour_mapping mapping;
-            mapping.tag     = tagname;
+            mapping.tag = tagname;
             mapping.pattern = patname;
             const int col = str_to_colour(colname);
             mapping.colour = col;
@@ -3405,9 +3381,8 @@ void game_options::read_option_line(const string &str, bool runscript)
     }
     else if (key == "dump_kill_places")
     {
-        dump_kill_places = (field == "none" ? KDO_NO_PLACES :
-                            field == "all"  ? KDO_ALL_PLACES
-                                            : KDO_ONE_PLACE);
+        dump_kill_places = (field == "none" ? KDO_NO_PLACES : field == "all" ? KDO_ALL_PLACES
+                                                                             : KDO_ONE_PLACE);
     }
     else if (key == "kill_map")
     {
@@ -3425,7 +3400,7 @@ void game_options::read_option_line(const string &str, bool runscript)
             if (cpos != string::npos)
             {
                 string from = s.substr(0, cpos);
-                string to   = s.substr(cpos + 1);
+                string to = s.substr(cpos + 1);
                 do_kill_map(from, to);
             }
         }
@@ -3437,20 +3412,15 @@ void game_options::read_option_line(const string &str, bool runscript)
 
         for (const string &ch : split_string(",", field))
         {
-            if (ch == "artefacts" || ch == "artifacts"
-                || ch == "artefact" || ch == "artifact")
+            if (ch == "artefacts" || ch == "artifacts" || ch == "artefact" || ch == "artifact")
             {
                 dump_item_origins |= IODS_ARTEFACTS;
             }
-            else if (ch == "ego_arm" || ch == "ego armour"
-                     || ch == "ego_armour" || ch == "ego armor"
-                     || ch == "ego_armor")
+            else if (ch == "ego_arm" || ch == "ego armour" || ch == "ego_armour" || ch == "ego armor" || ch == "ego_armor")
             {
                 dump_item_origins |= IODS_EGO_ARMOUR;
             }
-            else if (ch == "ego_weap" || ch == "ego weapon"
-                     || ch == "ego_weapon" || ch == "ego weapons"
-                     || ch == "ego_weapons")
+            else if (ch == "ego_weap" || ch == "ego weapon" || ch == "ego_weapon" || ch == "ego weapons" || ch == "ego_weapons")
             {
                 dump_item_origins |= IODS_EGO_WEAPON;
             }
@@ -3523,7 +3493,7 @@ void game_options::read_option_line(const string &str, bool runscript)
         {
             mprf(MSGCH_ERROR, "Unknown value for tile_display_mode: '%s'"
                               " (possible values: tiles/glyphs/hybrid",
-                                                                field.c_str());
+                 field.c_str());
         }
     }
 #endif
@@ -3577,7 +3547,7 @@ void game_options::read_option_line(const string &str, bool runscript)
         else
         {
             report_error("Unknown value '%s' for pregen_dungeon.",
-                                                            field.c_str());
+                         field.c_str());
         }
     }
 #ifdef USE_TILE
@@ -3588,12 +3558,13 @@ void game_options::read_option_line(const string &str, bool runscript)
         if (sscanf(field.c_str(), "%f", &tmp_scale))
         {
             tile_viewport_scale = min(1600, max(20,
-                                        static_cast<int>(tmp_scale * 100)));
+                                                static_cast<int>(tmp_scale * 100)));
         }
         else
         {
             report_error("Expected a decimal value for tile_viewport_scale,"
-                " but got '%s'.", field.c_str());
+                         " but got '%s'.",
+                         field.c_str());
         }
     }
     else if (key == "tile_map_scale")
@@ -3602,12 +3573,13 @@ void game_options::read_option_line(const string &str, bool runscript)
         if (sscanf(field.c_str(), "%f", &tmp_scale))
         {
             tile_map_scale = min(1600, max(20,
-                                        static_cast<int>(tmp_scale * 100)));
+                                           static_cast<int>(tmp_scale * 100)));
         }
         else
         {
             report_error("Expected a decimal value for tile_map_scale,"
-                " but got '%s'.", field.c_str());
+                         " but got '%s'.",
+                         field.c_str());
         }
     }
 #endif
@@ -3624,7 +3596,7 @@ void game_options::read_option_line(const string &str, bool runscript)
             setmode = 2;
 
         if (!clua.callbooleanfn(false, "c_process_lua_option", "ssd",
-                        key.c_str(), orig_field.c_str(), setmode))
+                                key.c_str(), orig_field.c_str(), setmode))
         {
             if (!clua.error.empty())
                 mprf(MSGCH_ERROR, "Lua error: %s", clua.error.c_str());
@@ -3634,39 +3606,39 @@ void game_options::read_option_line(const string &str, bool runscript)
 }
 
 static const map<string, flang_t> fake_lang_names = {
-    { "dwarven", flang_t::dwarven },
-    { "dwarf", flang_t::dwarven },
+    {"dwarven", flang_t::dwarven},
+    {"dwarf", flang_t::dwarven},
 
-    { "jäger", flang_t::jagerkin },
-    { "jägerkin", flang_t::jagerkin },
-    { "jager", flang_t::jagerkin },
-    { "jagerkin", flang_t::jagerkin },
-    { "jaeger", flang_t::jagerkin },
-    { "jaegerkin", flang_t::jagerkin },
+    {"jäger", flang_t::jagerkin},
+    {"jägerkin", flang_t::jagerkin},
+    {"jager", flang_t::jagerkin},
+    {"jagerkin", flang_t::jagerkin},
+    {"jaeger", flang_t::jagerkin},
+    {"jaegerkin", flang_t::jagerkin},
 
     // Due to a historical conflict with actual german, slang names are
     // supported. Not the really rude ones, though.
-    { "de", flang_t::kraut },
-    { "german", flang_t::kraut },
-    { "kraut", flang_t::kraut },
-    { "jerry", flang_t::kraut },
-    { "fritz", flang_t::kraut },
+    {"de", flang_t::kraut},
+    {"german", flang_t::kraut},
+    {"kraut", flang_t::kraut},
+    {"jerry", flang_t::kraut},
+    {"fritz", flang_t::kraut},
 
-    { "futhark", flang_t::futhark },
-    { "runes", flang_t::futhark },
-    { "runic", flang_t::futhark },
+    {"futhark", flang_t::futhark},
+    {"runes", flang_t::futhark},
+    {"runic", flang_t::futhark},
 
-    { "wide", flang_t::wide },
-    { "doublewidth", flang_t::wide },
-    { "fullwidth", flang_t::wide },
+    {"wide", flang_t::wide},
+    {"doublewidth", flang_t::wide},
+    {"fullwidth", flang_t::wide},
 
-    { "grunt", flang_t::grunt },
-    { "sgrunt", flang_t::grunt },
-    { "!!!", flang_t::grunt },
+    {"grunt", flang_t::grunt},
+    {"sgrunt", flang_t::grunt},
+    {"!!!", flang_t::grunt},
 
-    { "butt", flang_t::butt },
-    { "buttbot", flang_t::butt },
-    { "tef", flang_t::butt },
+    {"butt", flang_t::butt},
+    {"buttbot", flang_t::butt},
+    {"tef", flang_t::butt},
 };
 
 struct language_def
@@ -3677,37 +3649,37 @@ struct language_def
 };
 
 static const language_def lang_data[] =
-{
-    // Use null, not "en", for English so we don't try to look up translations.
-    { lang_t::EN, nullptr, { "english", "en", "c" } },
-    { lang_t::CS, "cs", { "czech", "český", "cesky" } },
-    { lang_t::DA, "da", { "danish", "dansk" } },
-    { lang_t::DE, "de", { "german", "deutsch" } },
-    { lang_t::EL, "el", { "greek", "ελληνικά", "ελληνικα" } },
-    { lang_t::ES, "es", { "spanish", "español", "espanol" } },
-    { lang_t::FI, "fi", { "finnish", "suomi" } },
-    { lang_t::FR, "fr", { "french", "français", "francais" } },
-    { lang_t::HU, "hu", { "hungarian", "magyar" } },
-    { lang_t::IT, "it", { "italian", "italiano" } },
-    { lang_t::JA, "ja", { "japanese", "日本人" } },
-    { lang_t::KO, "ko", { "korean", "한국의" } },
-    { lang_t::LT, "lt", { "lithuanian", "lietuvos" } },
-    { lang_t::LV, "lv", { "latvian", "lettish", "latvijas", "latviešu",
-                          "latvieshu", "latviesu" } },
-    { lang_t::NL, "nl", { "dutch", "nederlands" } },
-    { lang_t::PL, "pl", { "polish", "polski" } },
-    { lang_t::PT, "pt", { "portuguese", "português", "portugues" } },
-    { lang_t::RU, "ru", { "russian", "русский", "русскии" } },
-    { lang_t::SV, "sv", { "swedish", "svenska" } },
-    { lang_t::ZH, "zh", { "chinese", "中国的", "中國的" } },
+    {
+        // Use null, not "en", for English so we don't try to look up translations.
+        {lang_t::EN, nullptr, {"english", "en", "c"}},
+        {lang_t::CS, "cs", {"czech", "český", "cesky"}},
+        {lang_t::DA, "da", {"danish", "dansk"}},
+        {lang_t::DE, "de", {"german", "deutsch"}},
+        {lang_t::EL, "el", {"greek", "ελληνικά", "ελληνικα"}},
+        {lang_t::ES, "es", {"spanish", "español", "espanol"}},
+        {lang_t::FI, "fi", {"finnish", "suomi"}},
+        {lang_t::FR, "fr", {"french", "français", "francais"}},
+        {lang_t::HU, "hu", {"hungarian", "magyar"}},
+        {lang_t::IT, "it", {"italian", "italiano"}},
+        {lang_t::JA, "ja", {"japanese", "日本人"}},
+        {lang_t::KO, "ko", {"korean", "한국의"}},
+        {lang_t::LT, "lt", {"lithuanian", "lietuvos"}},
+        {lang_t::LV, "lv", {"latvian", "lettish", "latvijas", "latviešu", "latvieshu", "latviesu"}},
+        {lang_t::NL, "nl", {"dutch", "nederlands"}},
+        {lang_t::PL, "pl", {"polish", "polski"}},
+        {lang_t::PT, "pt", {"portuguese", "português", "portugues"}},
+        {lang_t::RU, "ru", {"russian", "русский", "русскии"}},
+        {lang_t::SV, "sv", {"swedish", "svenska"}},
+        {lang_t::ZH, "zh", {"chinese", "中国的", "中國的"}},
 };
 
 static string _supported_language_listing()
 {
-    return comma_separated_fn(&lang_data[0], &lang_data[ARRAYSZ(lang_data)],
-                              [](language_def ld){return ld.code ? ld.code : "en";},
-                              ",", ",",
-                              [](language_def){return true;});
+    return comma_separated_fn(
+        &lang_data[0], &lang_data[ARRAYSZ(lang_data)],
+        [](language_def ld) { return ld.code ? ld.code : "en"; },
+        ",", ",",
+        [](language_def) { return true; });
 }
 
 bool game_options::set_lang(const char *lc)
@@ -3729,11 +3701,11 @@ bool game_options::set_lang(const char *lc)
         }
     }
 
-    if (const flang_t * const flang = map_find(fake_lang_names, l))
+    if (const flang_t *const flang = map_find(fake_lang_names, l))
     {
         // Handle fake languages for backwards-compatibility with old rcs.
         // Override rather than stack, because that's how it used to work.
-        fake_langs = { { *flang, -1 } };
+        fake_langs = {{*flang, -1}};
         return true;
     }
 
@@ -3751,7 +3723,7 @@ void game_options::set_fake_langs(const string &input)
     for (const string &flang_text : split_string(",", input))
     {
         const int MAX_LANGS = 3;
-        if (fake_langs.size() >= (size_t) MAX_LANGS)
+        if (fake_langs.size() >= (size_t)MAX_LANGS)
         {
             report_error("Too many fake langs; maximum is %d", MAX_LANGS);
             break;
@@ -3766,8 +3738,7 @@ void game_options::set_fake_langs(const string &input)
         }
 
         int tval = -1;
-        const int value = split_flang.size() >= 2
-                          && parse_int(split_flang[1].c_str(), tval) ? tval : -1;
+        const int value = split_flang.size() >= 2 && parse_int(split_flang[1].c_str(), tval) ? tval : -1;
 
         const flang_t *flang = map_find(fake_lang_names, flang_name);
         if (flang)
@@ -3793,7 +3764,6 @@ void game_options::set_fake_langs(const string &input)
         }
         else
             report_error("Unknown language %s!", flang_name.c_str());
-
     }
 }
 
@@ -3806,7 +3776,7 @@ string game_options::resolve_include(string parent_file, string included_file,
 {
     // Before we start, make sure we convert forward slashes to the platform's
     // favoured file separator.
-    parent_file   = canonicalise_file_separator(parent_file);
+    parent_file = canonicalise_file_separator(parent_file);
     included_file = canonicalise_file_separator(included_file);
 
     // How we resolve include paths:
@@ -3824,7 +3794,7 @@ string game_options::resolve_include(string parent_file, string included_file,
     // multiuser system. On multiuser systems assert_read_safe_path()
     // will throw an exception if it sees absolute paths.
     if (is_absolute_path(included_file))
-        return file_exists(included_file)? included_file : "";
+        return file_exists(included_file) ? included_file : "";
 
     if (!parent_file.empty())
     {
@@ -3895,7 +3865,7 @@ void game_options::include(const string &rawfilename, bool resolve,
         read_options(fl, runscript, false);
 }
 
-void game_options::report_error(const char* format, ...)
+void game_options::report_error(const char *format, ...)
 {
     va_list args;
     va_start(args, format);
@@ -3908,7 +3878,7 @@ void game_options::report_error(const char* format, ...)
 
 static string check_string(const char *s)
 {
-    return s? s : "";
+    return s ? s : "";
 }
 
 void get_system_environment()
@@ -3923,8 +3893,7 @@ void get_system_environment()
 #if defined(TARGET_OS_MACOSX) && !defined(DGAMELAUNCH)
     if (SysEnv.crawl_dir.empty())
     {
-        SysEnv.crawl_dir
-            = _user_home_subpath("Library/Application Support/" CRAWL);
+        SysEnv.crawl_dir = _user_home_subpath("Library/Application Support/" CRAWL);
     }
 #endif
 
@@ -3939,7 +3908,7 @@ void get_system_environment()
     if (simplemail && strcmp(simplemail, "0"))
     {
         const char *mail = getenv("MAIL");
-        SysEnv.messagefile = mail? mail : "";
+        SysEnv.messagefile = mail ? mail : "";
     }
 #endif
 
@@ -4004,7 +3973,8 @@ enum commandline_option_type
     CLO_EXPLORE,
     CLO_NO_SAVE,
     CLO_GDB,
-    CLO_NO_GDB, CLO_NOGDB,
+    CLO_NO_GDB,
+    CLO_NOGDB,
     CLO_THROTTLE,
     CLO_NO_THROTTLE,
     CLO_PLAYABLE_JSON, // JSON metadata for species, jobs, combos.
@@ -4022,17 +3992,58 @@ enum commandline_option_type
 };
 
 static const char *cmd_ops[] =
-{
-    "scores", "name", "species", "background", "dir", "rc", "rcdir", "tscores",
-    "vscores", "scorefile", "morgue", "macro", "mapstat", "dump-disconnect",
-    "objstat", "iters", "force-map", "arena", "dump-maps", "test", "script",
-    "builddb", "help", "version", "seed", "pregen", "save-version", "sprint",
-    "extra-opt-first", "extra-opt-last", "sprint-map", "edit-save",
-    "print-charset", "tutorial", "wizard", "explore", "no-save", "gdb",
-    "no-gdb", "nogdb", "throttle", "no-throttle", "playable-json",
-    "branches-json", "save-json", "gametypes-json", "bones",
+    {
+        "scores",
+        "name",
+        "species",
+        "background",
+        "dir",
+        "rc",
+        "rcdir",
+        "tscores",
+        "vscores",
+        "scorefile",
+        "morgue",
+        "macro",
+        "mapstat",
+        "dump-disconnect",
+        "objstat",
+        "iters",
+        "force-map",
+        "arena",
+        "dump-maps",
+        "test",
+        "script",
+        "builddb",
+        "help",
+        "version",
+        "seed",
+        "pregen",
+        "save-version",
+        "sprint",
+        "extra-opt-first",
+        "extra-opt-last",
+        "sprint-map",
+        "edit-save",
+        "print-charset",
+        "tutorial",
+        "wizard",
+        "explore",
+        "no-save",
+        "gdb",
+        "no-gdb",
+        "nogdb",
+        "throttle",
+        "no-throttle",
+        "playable-json",
+        "branches-json",
+        "save-json",
+        "gametypes-json",
+        "bones",
 #ifdef USE_TILE_WEB
-    "webtiles-socket", "await-connection", "print-webtiles-options",
+        "webtiles-socket",
+        "await-connection",
+        "print-webtiles-options",
 #endif
 };
 
@@ -4045,13 +4056,13 @@ static string _find_executable_path()
     // binary executable. This is useful, because argv[0] can be relative
     // when we really need an absolute path in order to locate the game's
     // resources.
-#if defined (TARGET_OS_WINDOWS)
+#if defined(TARGET_OS_WINDOWS)
     wchar_t tempPath[MAX_PATH];
     if (GetModuleFileNameW(nullptr, tempPath, MAX_PATH))
         return utf16_to_8(tempPath);
     else
         return "";
-#elif defined (UNIX)
+#elif defined(UNIX)
     char tempPath[2048];
     const ssize_t rsize =
         readlink("/proc/self/exe", tempPath, sizeof(tempPath) - 1);
@@ -4061,7 +4072,7 @@ static string _find_executable_path()
         return mb_to_utf8(tempPath);
     }
     return "";
-#elif defined (TARGET_OS_MACOSX)
+#elif defined(TARGET_OS_MACOSX)
     return mb_to_utf8(NXArgv[0]);
 #else
     // We don't know how to find the executable's path on this OS.
@@ -4119,33 +4130,87 @@ enum eb_command_type
     NUM_EB
 };
 
-template <typename T> struct edit_command
+template <typename T>
+struct edit_command
 {
     T cmd;
-    const char* name;
+    const char *name;
     bool rw;
     int min_args, max_args;
 };
 
 static edit_command<es_command_type> es_commands[] =
-{
-    { ES_LS,      "ls",      false, 0, 0, },
-    { ES_GET,     "get",     false, 1, 2, },
-    { ES_PUT,     "put",     true,  1, 2, },
-    { ES_RM,      "rm",      true,  1, 1, },
-    { ES_REPACK,  "repack",  false, 0, 0, },
-    { ES_INFO,    "info",    false, 0, 0, },
+    {
+        {
+            ES_LS,
+            "ls",
+            false,
+            0,
+            0,
+        },
+        {
+            ES_GET,
+            "get",
+            false,
+            1,
+            2,
+        },
+        {
+            ES_PUT,
+            "put",
+            true,
+            1,
+            2,
+        },
+        {
+            ES_RM,
+            "rm",
+            true,
+            1,
+            1,
+        },
+        {
+            ES_REPACK,
+            "repack",
+            false,
+            0,
+            0,
+        },
+        {
+            ES_INFO,
+            "info",
+            false,
+            0,
+            0,
+        },
 };
 
 static edit_command<eb_command_type> eb_commands[] =
-{
-    { EB_LS,       "ls",      false, 0, 2, },
-    { EB_MERGE,    "merge",   false, 1, 1, },
-    { EB_RM,       "rm",      true,  1, 1 },
-    { EB_REWRITE,  "rewrite", true,  0, 1 },
+    {
+        {
+            EB_LS,
+            "ls",
+            false,
+            0,
+            2,
+        },
+        {
+            EB_MERGE,
+            "merge",
+            false,
+            1,
+            1,
+        },
+        {EB_RM, "rm", true, 1, 1},
+        {EB_REWRITE, "rewrite", true, 0, 1},
 };
 
-#define FAIL(...) do { fprintf(stderr, __VA_ARGS__); return; } while (0)
+#define FAIL(...)                     \
+    do                                \
+    {                                 \
+        fprintf(stderr, __VA_ARGS__); \
+        return;                       \
+    } while (0)
 static void _edit_save(int argc, char **argv)
 {
     if (argc <= 1 || !strcmp(argv[1], "help"))
@@ -4157,8 +4222,7 @@ static void _edit_save(int argc, char **argv)
                "  put <chunk> [<chunkfile>]   import a chunk from <chunkfile>\n"
                "     <chunkfile> defaults to \"chunk\"; use \"-\" for stdout/stdin\n"
                "  rm <chunk>                  delete a chunk\n"
-               "  repack                      defrag and reclaim unused space\n"
-             );
+               "  repack                      defrag and reclaim unused space\n");
         return;
     }
     const char *name = argv[0];
@@ -4331,7 +4395,7 @@ static save_version _read_bones_version(const string &filename)
 static void _write_bones(const string &filename, vector<ghost_demon> ghosts)
 {
     // TODO: duplicates some logic in files.cc
-    FILE* ghost_file = lk_open_exclusive(filename);
+    FILE *ghost_file = lk_open_exclusive(filename);
     if (!ghost_file)
     {
         string error = "Couldn't write to bones file " + filename;
@@ -4346,7 +4410,7 @@ static void _write_bones(const string &filename, vector<ghost_demon> ghosts)
 }
 
 static void _bones_ls(const string &filename, const string name_match,
-                                                            bool long_output)
+                      bool long_output)
 {
     save_version v = _read_bones_version(filename);
     cout << "Bones file '" << filename << "', version " << v.major << "."
@@ -4416,8 +4480,7 @@ static void _bones_rewrite(const string filename, const string remove, bool dedu
 
     for (auto g : ghosts)
     {
-        if (dedup && ghosts_by_name.count(g.name)
-                                            && ghosts_by_name[g.name] == g.xl)
+        if (dedup && ghosts_by_name.count(g.name) && ghosts_by_name[g.name] == g.xl)
         {
             dups++;
             continue;
@@ -4483,8 +4546,7 @@ static void _edit_bones(int argc, char **argv)
                "                              <file2>. Capped at %d; read in reverse order.\n"
                "  rm <file> <name>            Rewrite a ghost file without <name>\n"
                "  rewrite <file> [--dedup]    Rewrite a ghost file, fixing up version etc.\n",
-               MAX_GHOSTS
-             );
+               MAX_GHOSTS);
         return;
     }
     const char *cmdn = argv[0];
@@ -4513,13 +4575,12 @@ static void _edit_bones(int argc, char **argv)
         if (cmd == EB_LS)
         {
             const bool long_out =
-                           argc == 3 && !strcmp(argv[2], "--long")
-                        || argc == 4 && !strcmp(argv[3], "--long");
+                argc == 3 && !strcmp(argv[2], "--long") || argc == 4 && !strcmp(argv[3], "--long");
             if (argc == 4 && !long_out)
                 FAIL("Unknown extra option to ls: '%s'\n", argv[3]);
             const string name_match = argc == 3 && !long_out || argc == 4
-                                    ? string(argv[2])
-                                    : "";
+                                          ? string(argv[2])
+                                          : "";
             _bones_ls(name, lowercase_string(name_match), long_out);
         }
         else if (cmd == EB_REWRITE)
@@ -4547,10 +4608,11 @@ static void _edit_bones(int argc, char **argv)
         if (err.version.valid() && err.version.is_future())
         {
             FAIL("Bones file '%s' is from the future (%d.%d), this instance of "
-                 "crawl needs %d.%d.\n", name,
-                    err.version.major, err.version.minor,
-                    save_version::current_bones().major,
-                    save_version::current_bones().minor);
+                 "crawl needs %d.%d.\n",
+                 name,
+                 err.version.major, err.version.minor,
+                 save_version::current_bones().major,
+                 save_version::current_bones().minor);
         }
         else
             FAIL("Error: %s\n", err.what());
@@ -4564,8 +4626,8 @@ static void _edit_bones(int argc, char **argv)
 #undef FAIL
 
 #ifdef USE_TILE_WEB
-static void _write_colour_list(const vector<pair<int, int> > variable,
-        const string &name)
+static void _write_colour_list(const vector<pair<int, int>> variable,
+                               const string &name)
 {
     tiles.json_open_array(name);
     for (const auto &entry : variable)
@@ -4619,7 +4681,7 @@ static void _write_minimap_colours()
     _write_vcolour("tile_window_col", Options.tile_window_col);
 }
 
-void game_options::write_webtiles_options(const string& name)
+void game_options::write_webtiles_options(const string &name)
 {
     tiles.json_open_object(name);
 
@@ -4645,20 +4707,20 @@ void game_options::write_webtiles_options(const string& name)
     tiles.json_write_bool("tile_misc_anim", Options.tile_misc_anim);
     tiles.json_write_bool("tile_realtime_anim", Options.tile_realtime_anim);
     tiles.json_write_bool("tile_level_map_hide_messages",
-            Options.tile_level_map_hide_messages);
+                          Options.tile_level_map_hide_messages);
     tiles.json_write_bool("tile_level_map_hide_sidebar",
-            Options.tile_level_map_hide_sidebar);
+                          Options.tile_level_map_hide_sidebar);
     tiles.json_write_bool("tile_web_mouse_control", Options.tile_web_mouse_control);
     tiles.json_write_bool("tile_menu_icons", Options.tile_menu_icons);
 
     tiles.json_write_string("tile_font_crt_family",
-            Options.tile_font_crt_family);
+                            Options.tile_font_crt_family);
     tiles.json_write_string("tile_font_stat_family",
-            Options.tile_font_stat_family);
+                            Options.tile_font_stat_family);
     tiles.json_write_string("tile_font_msg_family",
-            Options.tile_font_msg_family);
+                            Options.tile_font_msg_family);
     tiles.json_write_string("tile_font_lbl_family",
-            Options.tile_font_lbl_family);
+                            Options.tile_font_lbl_family);
     tiles.json_write_int("tile_font_crt_size", Options.tile_font_crt_size);
     tiles.json_write_int("tile_font_stat_size", Options.tile_font_stat_size);
     tiles.json_write_int("tile_font_msg_size", Options.tile_font_msg_size);
@@ -4713,19 +4775,18 @@ static void _print_gametypes_json()
         if (c != "" || gt == GAME_TYPE_NORMAL)
         {
             json_append_member(json.node, gametype_to_str(gt).c_str(),
-                                                        json_mkstring(c));
+                               json_mkstring(c));
         }
     }
     fprintf(stdout, "%s", json.to_string().c_str());
 }
 
-static bool _check_extra_opt(char* _opt)
+static bool _check_extra_opt(char *_opt)
 {
     string opt(_opt);
     trim_string(opt);
 
-    if (opt[0] == ':' || opt[0] == '<' || opt[0] == '{'
-        || starts_with(opt, "L<") || starts_with(opt, "Lua{"))
+    if (opt[0] == ':' || opt[0] == '<' || opt[0] == '{' || starts_with(opt, "L<") || starts_with(opt, "Lua{"))
     {
         fprintf(stderr, "An extra option can't use Lua (%s)\n",
                 _opt);
@@ -4785,7 +4846,7 @@ bool parse_args(int argc, char **argv, bool rc_only)
     SysEnv.rcdirs.clear();
     SysEnv.map_gen_iters = 0;
 
-    if (argc < 2)           // no args!
+    if (argc < 2) // no args!
         return true;
 
     char *arg, *next_arg;
@@ -4795,7 +4856,7 @@ bool parse_args(int argc, char **argv, bool rc_only)
 
     // initialise
     for (int i = 0; i < num_cmd_ops; i++)
-         arg_seen[i] = false;
+        arg_seen[i] = false;
 
     if (SysEnv.cmd_args.empty())
     {
@@ -4809,8 +4870,8 @@ bool parse_args(int argc, char **argv, bool rc_only)
         arg = argv[current];
 
         // next argument (if there is one)
-        if (current+1 < argc)
-            next_arg = argv[current+1];
+        if (current + 1 < argc)
+            next_arg = argv[current + 1];
         else
             next_arg = nullptr;
 
@@ -4822,7 +4883,8 @@ bool parse_args(int argc, char **argv, bool rc_only)
         {
             fprintf(stderr,
                     "Option '%s' is invalid; options must be prefixed "
-                    "with -\n\n", arg);
+                    "with -\n\n",
+                    arg);
             return false;
         }
 
@@ -4867,8 +4929,7 @@ bool parse_args(int argc, char **argv, bool rc_only)
 
         // Partially parse next argument.
         bool next_is_param = false;
-        if (next_arg != nullptr
-            && (next_arg[0] != '-' || strlen(next_arg) == 1))
+        if (next_arg != nullptr && (next_arg[0] != '-' || strlen(next_arg) == 1))
         {
             next_is_param = true;
         }
@@ -4880,8 +4941,8 @@ bool parse_args(int argc, char **argv, bool rc_only)
         case CLO_TSCORES:
         case CLO_VSCORES:
             if (!next_is_param)
-                ecount = -1;            // default
-            else // optional number given
+                ecount = -1; // default
+            else             // optional number given
             {
                 ecount = atoi(next_arg);
                 if (ecount < 1)
@@ -5012,7 +5073,7 @@ bool parse_args(int argc, char **argv, bool rc_only)
             break;
 
         case CLO_SCRIPT:
-            crawl_state.test   = true;
+            crawl_state.test = true;
             crawl_state.script = true;
             crawl_state.script_args.clear();
             if (current < argc - 1)
@@ -5189,9 +5250,9 @@ bool parse_args(int argc, char **argv, bool rc_only)
             if (!next_is_param)
                 return false;
 
-            nextUsed               = true;
+            nextUsed = true;
             crawl_state.sprint_map = next_arg;
-            Options.game.map       = next_arg;
+            Options.game.map = next_arg;
             break;
 
         case CLO_TUTORIAL:
@@ -5220,7 +5281,7 @@ bool parse_args(int argc, char **argv, bool rc_only)
 
 #ifdef USE_TILE_WEB
         case CLO_WEBTILES_SOCKET:
-            nextUsed          = true;
+            nextUsed = true;
             tiles.m_sock_name = next_arg;
             break;
 
@@ -5339,13 +5400,12 @@ void menu_sort_condition::set_menu_type(string &s)
         const string mname;
         menu_type mtype;
     } menu_type_map[] =
-      {
-          { "any:",    menu_type::any       },
-          { "inv:",    menu_type::invlist   },
-          { "drop:",   menu_type::drop      },
-          { "pickup:", menu_type::pickup    },
-          { "know:",   menu_type::know      }
-      };
+        {
+            {"any:", menu_type::any},
+            {"inv:", menu_type::invlist},
+            {"drop:", menu_type::drop},
+            {"pickup:", menu_type::pickup},
+            {"know:", menu_type::know}};
 
     for (const auto &mi : menu_type_map)
     {
@@ -5366,7 +5426,7 @@ void menu_sort_condition::set_sort(string &s)
     if (starts_with(s, "auto:"))
         trail_pos = s.find(':', trail_pos + 1);
 
-    string sort_cond = trail_pos == string::npos? s : s.substr(0, trail_pos);
+    string sort_cond = trail_pos == string::npos ? s : s.substr(0, trail_pos);
 
     trim_string(sort_cond);
     sort = _read_bool_or_number(sort_cond, sort, "auto:");
@@ -5381,9 +5441,8 @@ void menu_sort_condition::set_comparators(string &s)
 {
     init_item_sort_comparators(
         cmp,
-        s.empty()? "equipped, basename, qualname, curse, qty" : s);
+        s.empty() ? "equipped, basename, qualname, curse, qty" : s);
 }
-
 
 // utility function for mapping inputs to submenu titles
 int key_to_sub_menu(string key)
@@ -5404,19 +5463,17 @@ int key_to_sub_menu(string key)
         return -1;
 } // key_to_sub_menu(string key)
 
-
 // options menu
 void disp_options()
 {
     // sub menus to be displayed
-    map<string, map<int, string> > sub_menus;
+    map<string, map<int, string>> sub_menus;
     sub_menus.insert(make_pair("Commands", map<int, string>()));
     sub_menus.insert(make_pair("Visual", map<int, string>()));
     sub_menus.insert(make_pair("Travel", map<int, string>()));
     sub_menus.insert(make_pair("Interactions", map<int, string>()));
     sub_menus.insert(make_pair("Messages", map<int, string>()));
     sub_menus.insert(make_pair("Inscriptions", map<int, string>()));
-
     // if things go wrong
     if (sub_menus.empty())
     {
@@ -5430,8 +5487,7 @@ void disp_options()
     MenuEntry *title = new MenuEntry("Options Menu");
     title->colour = YELLOW;
     options_menu.set_title(title);
-
-    map<string, map<int, string> >::iterator it;
+    map<string, map<int, string>>::iterator it;
     // display submenus
     int i = 0;
     for (it = sub_menus.begin(); it != sub_menus.end(); it++, i++)
@@ -5440,7 +5496,7 @@ void disp_options()
         string sub_menu = it->first;
         trim_string_right(sub_menu);
         MenuEntry *me = new MenuEntry(sub_menu, MEL_ITEM, 1, letter);
-        me->data = &it->first; // WILL FIX THIS CRAP
+        me->data = (void *)&it->first; // Added cast to void
         options_menu.add_entry(me);
     }
 
@@ -5448,7 +5504,7 @@ void disp_options()
     while (true)
     {
         // display the menu
-        vector<MenuEntry*> sel = options_menu.show();
+        vector<MenuEntry *> sel = options_menu.show();
         if (sel.empty())
             return;
         else
@@ -5456,7 +5512,7 @@ void disp_options()
             ASSERT(sel.size() == 1);
             ASSERT(sel[0]->hotkeys.size() == 1);
 
-            string key = *((string*) sel[0]->data);
+            string key = *((string *)sel[0]->data);
             int index = key_to_sub_menu(key);
             string answer;
 
@@ -5464,7 +5520,15 @@ void disp_options()
                 answer = "Sorry. Cannot display options submenu!";
             else
             {
-                answer = sub_menus[index] + "\n\nSHEESHH";
+                for (it = sub_menus.begin(); it != sub_menus.end(); it++)
+                {
+                    if (it->second[index] == "a"){
+                    answer = it->second[index] + "\n\nSHEESHH";
+                    }
+                    else {
+                        answer = "Cant find.... \n\nSHEEESH\n";
+                    }
+                }
             }
 
             show_description(answer);
