@@ -5444,24 +5444,49 @@ void menu_sort_condition::set_comparators(string &s)
         s.empty() ? "equipped, basename, qualname, curse, qty" : s);
 }
 
-// utility function for mapping inputs to submenu titles
-int key_to_sub_menu(string key)
+
+// creates a submenu for a set of options
+void disp_sub_menu(map<int, string> sub_menu_options, string sub_menu_name)
 {
-    if (key == "Commands")
-        return 0;
-    else if (key == "Visual")
-        return 1;
-    else if (key == "Travel")
-        return 2;
-    else if (key == "Interactions")
-        return 3;
-    else if (key == "Messages")
-        return 4;
-    else if (key == "Inscriptions")
-        return 5;
-    else
-        return -1;
-} // key_to_sub_menu(string key)
+    if (sub_menu_options.empty())
+    {
+        mpr("Sorry. Cannot display options!");
+        return;
+    }
+    Menu sub_menu(MF_SINGLESELECT | MF_ANYPRINTABLE | MF_ALLOW_FORMATTING);
+    MenuEntry *title = new MenuEntry(sub_menu_name);
+    title->colour = YELLOW;
+    sub_menu.set_title(title);
+
+    for (map<int, string>::iterator it = sub_menu_options.begin(); it != sub_menu_options.end(); it++)
+    {
+        const char letter = index_to_letter(it->first);
+        string entry = it->second;
+        trim_string_right(entry);
+        MenuEntry *me = new MenuEntry(entry, MEL_ITEM, 1, letter);
+        me->data = (void *)&it->first;
+        sub_menu.add_entry(me);
+    }
+
+    while (true)
+    {
+        vector<MenuEntry*> sel = sub_menu.show();
+        if (sel.empty())
+            return;
+        else
+        {
+            ASSERT(sel.size() == 1);
+            ASSERT(sel[0]->hotkeys.size() == 1);
+
+            string key = *((string*) sel[0]->data);
+            string answer = "SHEESSHHH";
+            show_description(answer);
+        }
+    }
+
+    return;
+} // disp_sub_menu()
+
 
 // options menu
 void disp_options()
@@ -5474,6 +5499,16 @@ void disp_options()
     sub_menus.insert(make_pair("Interactions", map<int, string>()));
     sub_menus.insert(make_pair("Messages", map<int, string>()));
     sub_menus.insert(make_pair("Inscriptions", map<int, string>()));
+
+    // insert submenu options
+    // TO DO - POPULATE OPTIONS PER SUBMENU
+    sub_menus.at("Commands").insert(make_pair(0, "auto_switch"));
+    sub_menus.at("Visual").insert(make_pair(0, "SHESSHHH"));
+    sub_menus.at("Travel").insert(make_pair(0, "SHESSHHH"));
+    sub_menus.at("Interactions").insert(make_pair(0, "SHESSHHH"));
+    sub_menus.at("Messages").insert(make_pair(0, "SHESSHHH"));
+    sub_menus.at("Inscriptions").insert(make_pair(0, "SHESSHHH"));
+
     // if things go wrong
     if (sub_menus.empty())
     {
@@ -5488,6 +5523,7 @@ void disp_options()
     title->colour = YELLOW;
     options_menu.set_title(title);
     map<string, map<int, string>>::iterator it;
+    map<int, string>::iterator it_options;
     // display submenus
     int i = 0;
     for (it = sub_menus.begin(); it != sub_menus.end(); it++, i++)
@@ -5496,7 +5532,7 @@ void disp_options()
         string sub_menu = it->first;
         trim_string_right(sub_menu);
         MenuEntry *me = new MenuEntry(sub_menu, MEL_ITEM, 1, letter);
-        me->data = (void *)&it->first; // Added cast to void
+        me->data = (void *)&it->first;
         options_menu.add_entry(me);
     }
 
@@ -5509,29 +5545,34 @@ void disp_options()
             return;
         else
         {
+            // get user input
             ASSERT(sel.size() == 1);
             ASSERT(sel[0]->hotkeys.size() == 1);
 
             string key = *((string *)sel[0]->data);
-            int index = key_to_sub_menu(key);
             string answer;
 
-            if (index == -1)
+            // handle it
+            if (!sub_menus.count(key))
                 answer = "Sorry. Cannot display options submenu!";
             else
             {
+                bool sub_menu_found = false;
+                // display submenu based off of user input
                 for (it = sub_menus.begin(); it != sub_menus.end(); it++)
                 {
-                    if (it->second[index] == "a"){
-                    answer = it->second[index] + "\n\nSHEESHH";
-                    }
-                    else {
-                        answer = "Cant find.... \n\nSHEEESH\n";
+                    if (it->first == key){
+                        sub_menu_found = true;
+                        disp_sub_menu(it->second, key);
+                    break;
                     }
                 }
+                if (!sub_menu_found)
+                {
+                    answer = "Cant find submenu....\n";
+                    show_description(answer);
+                }
             }
-
-            show_description(answer);
         }
     }
     return;
