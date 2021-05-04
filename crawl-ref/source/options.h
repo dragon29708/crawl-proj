@@ -127,6 +127,7 @@ DEF_BITFIELD(use_animations_type, use_animation_type);
 
 // options menu stuff
 vector <string> get_all_options();
+string toggle_option(string key);
 void disp_options();
 
 class LineInput;

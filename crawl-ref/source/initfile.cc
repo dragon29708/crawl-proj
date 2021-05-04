@@ -5444,121 +5444,121 @@ void menu_sort_condition::set_comparators(string &s)
         s.empty() ? "equipped, basename, qualname, curse, qty" : s);
 }
 
-string toggle_option(string key) { // heres your if statement you monster
+string toggle_option(string key) { // heres your if statement you monster - thx <3
     string answer = "error";
 
     if (key == "Auto switch"){
         Options.auto_switch = !Options.auto_switch;
         if (!Options.auto_switch){
-            answer =  "Auto switch is false";
+            answer =  "Auto switch is OFF";
         }  
         else {
-            answer =  "Auto switch is true";
+            answer =  "Auto switch is ON";
         }
     }
     else if (key == "Easy unequip"){
         Options.easy_unequip = !Options.easy_unequip;
         if (!Options.easy_unequip){
-            answer = "Easy unequip is false";
+            answer = "Easy unequip is OFF";
         }  
         else{
-            answer = "Easy unequip is true";
+            answer = "Easy unequip is ON";
         }
 
     }
-    else if (key == "Pickup thrown"){
-        Options.pickup_thrown = !Options.pickup_thrown;
-        if (!Options.pickup_thrown){
-            answer = "Pickup thrown is false";
+    else if (key == "Equip unequip"){
+        Options.equip_unequip = !Options.equip_unequip;
+        if (!Options.equip_unequip){
+            answer = "Equip unequip is OFF";
         }  
         else{
-            answer = "Pickup thrown is true";
+            answer = "Equip unequip is ON";
         }
     }
     else if (key == "Warn hatches"){
         Options.warn_hatches = !Options.warn_hatches;
         if (!Options.warn_hatches){
-            answer = "Warn hatches is false";
+            answer = "Warn hatches is OFF";
         }  
         else{
-            answer = "Warn hatches is true";
+            answer = "Warn hatches is ON";
         }
 
     }
     else if (key == "Auto hide spells"){
         Options.auto_hide_spells = !Options.auto_hide_spells;
         if (!Options.auto_hide_spells){
-            answer = "Auto hide spells is false";
+            answer = "Auto hide spells is OFF";
         }  
         else{
-            answer = "Auto hide spells is true";
+            answer = "Auto hide spells is ON";
         }
 
     }
     else if (key == "Show more"){
         Options.show_more = !Options.show_more;
         if (!Options.show_more){
-            answer = "Show more is false";
+            answer = "Show more is OFF";
         }  
         else{
-            answer = "Show more is true";
+            answer = "Show more is ON";
         }
 
     }
     else if (key == "Bold brightens foreground"){
         Options.bold_brightens_foreground = !Options.bold_brightens_foreground;
         if (!Options.bold_brightens_foreground){
-            answer = "Bold brightens foreground is false";
+            answer = "Bold brightens foreground is OFF";
         }  
         else{
-            answer = "Bold brightens foreground is true";
+            answer = "Bold brightens foreground is ON";
         }
 
     }
     else if (key == "Cloud status"){
         Options.cloud_status = !Options.cloud_status;
         if (!Options.cloud_status){
-            answer = "Cloud status is false";
+            answer = "Cloud status is OFF";
         }  
         else{
-            answer = "Cloud status is true";
+            answer = "Cloud status is ON";
         }
 
     }
     else if (key == "Launcher autoquiver"){
         Options.launcher_autoquiver = !Options.launcher_autoquiver;
         if (!Options.launcher_autoquiver){
-            answer = "Launcher autoquiver is false";
+            answer = "Launcher autoquiver is OFF";
         }  
         else{
-            answer = "Launcher autoquiver is true";
+            answer = "Launcher autoquiver is ON";
         }
 
     }
     else if (key == "Sounds on"){
         Options.sounds_on = !Options.sounds_on;
         if (!Options.sounds_on){
-            answer = "Sounds on is false";
+            answer = "Sounds on is OFF";
         }  
         else{
-            answer = "Sounds on is true";
+            answer = "Sounds on is ON";
         }
 
     }
     else if (key == "No save"){
         Options.no_save = !Options.no_save;
         if (!Options.no_save){
-            answer = "No save is false";
+            answer = "No save is OFF";
         }  
         else{
-            answer = "No save is true";
+            answer = "No save is ON";
         }
 
     }
     return answer;
 
+} // toggle_option()
 
-}
 // creates a submenu for a set of options
 vector <string> get_all_options()
 {
@@ -5578,7 +5578,6 @@ vector <string> get_all_options()
     return options; // vector of strings
 } // get_all_options()
 
-
 // options menu
 void disp_options()
 {
@@ -5595,16 +5594,16 @@ void disp_options()
     // make the menu
     Menu options_menu(MF_SINGLESELECT | MF_ANYPRINTABLE | MF_ALLOW_FORMATTING);
     // make and set title
-    MenuEntry *title = new MenuEntry("Options Menu");
+    MenuEntry *title = new MenuEntry("Options Menu - TOGGLE TO CHANGE OPTION");
     title->colour = YELLOW;
     options_menu.set_title(title);
     // display submenus
     for (unsigned int i = 0, size = options_list.size(); i < size; i++)
     {
         const char letter = index_to_letter(i);
-        string question = options_list[i];
-        trim_string_right(question);
-        MenuEntry *me = new MenuEntry(question, MEL_ITEM, 1, letter);
+        string option_type = options_list[i];
+        trim_string_right(option_type);
+        MenuEntry *me = new MenuEntry(option_type, MEL_ITEM, 1, letter);
         me->data = &options_list[i];
         options_menu.add_entry(me);
     }
