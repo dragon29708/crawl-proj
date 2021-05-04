@@ -126,7 +126,7 @@ enum use_animation_type
 DEF_BITFIELD(use_animations_type, use_animation_type);
 
 // options menu stuff
-void disp_sub_menu(map<int, string> sub_menu_options, string sub_menu_name);
+vector <string> get_all_options();
 void disp_options();
 
 class LineInput;
