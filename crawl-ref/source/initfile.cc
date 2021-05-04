@@ -5492,25 +5492,11 @@ void disp_sub_menu(map<int, string> sub_menu_options, string sub_menu_name)
 void disp_options()
 {
     // sub menus to be displayed
-    map<string, map<int, string>> sub_menus;
-    sub_menus.insert(make_pair("Commands", map<int, string>()));
-    sub_menus.insert(make_pair("Visual", map<int, string>()));
-    sub_menus.insert(make_pair("Travel", map<int, string>()));
-    sub_menus.insert(make_pair("Interactions", map<int, string>()));
-    sub_menus.insert(make_pair("Messages", map<int, string>()));
-    sub_menus.insert(make_pair("Inscriptions", map<int, string>()));
-
-    // insert submenu options
-    // TO DO - POPULATE OPTIONS PER SUBMENU
-    sub_menus.at("Commands").insert(make_pair(0, "auto_switch"));
-    sub_menus.at("Visual").insert(make_pair(0, "SHESSHHH"));
-    sub_menus.at("Travel").insert(make_pair(0, "SHESSHHH"));
-    sub_menus.at("Interactions").insert(make_pair(0, "SHESSHHH"));
-    sub_menus.at("Messages").insert(make_pair(0, "SHESSHHH"));
-    sub_menus.at("Inscriptions").insert(make_pair(0, "SHESSHHH"));
+    vector<string> options_list; // = getAllOptions();
+    options_list.push_back("auto_switch");
 
     // if things go wrong
-    if (sub_menus.empty())
+    if (options_list.empty())
     {
         mpr("Sorry. Cannot display options menu!");
         return;
@@ -5522,17 +5508,14 @@ void disp_options()
     MenuEntry *title = new MenuEntry("Options Menu");
     title->colour = YELLOW;
     options_menu.set_title(title);
-    map<string, map<int, string>>::iterator it;
-    map<int, string>::iterator it_options;
     // display submenus
-    int i = 0;
-    for (it = sub_menus.begin(); it != sub_menus.end(); it++, i++)
+    for (unsigned int i = 0, size = options_list.size(); i < size; i++)
     {
         const char letter = index_to_letter(i);
-        string sub_menu = it->first;
-        trim_string_right(sub_menu);
-        MenuEntry *me = new MenuEntry(sub_menu, MEL_ITEM, 1, letter);
-        me->data = (void *)&it->first;
+        string question = options_list[i];
+        trim_string_right(question);
+        MenuEntry *me = new MenuEntry(question, MEL_ITEM, 1, letter);
+        me->data = &options_list[i];
         options_menu.add_entry(me);
     }
 
@@ -5545,43 +5528,24 @@ void disp_options()
             return;
         else
         {
-            // get user input
             ASSERT(sel.size() == 1);
             ASSERT(sel[0]->hotkeys.size() == 1);
 
-            string key = *((string *)sel[0]->data);
-            string answer;
+            string key = *((string*) sel[0]->data);
+            string answer = "SHEESHH";
+            
+            // toggle option
+            Options.auto_switch = !(Options.auto_switch);
+            // let user know
+            (Options.auto_switch) ? mpr("Auto switch on") : mpr("Auto switch off");
 
-            // handle it
-            if (!sub_menus.count(key))
-                answer = "Sorry. Cannot display options submenu!";
-            else
-            {
-                bool sub_menu_found = false;
-                // display submenu based off of user input
-                for (it = sub_menus.begin(); it != sub_menus.end(); it++)
-                {
-                    if (it->first == key){
-                        sub_menu_found = true;
-                        disp_sub_menu(it->second, key);
-                    break;
-                    }
-                }
-                if (!sub_menu_found)
-                {
-                    answer = "Cant find submenu....\n";
-                    show_description(answer);
-                }
-            }
+            show_description(answer);
         }
     }
     return;
     //     // auto_switch
     //     case 1:
-    //         // toggle option
-    //         Options.auto_switch = !(Options.auto_switch);
-    //         // let user know
-    //         (Options.auto_switch) ? mpr("Auto switch on") : mpr("Auto switch off");
+    //         
 
     //         break;
 } // options menu
