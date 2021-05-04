@@ -5449,28 +5449,27 @@ void menu_sort_condition::set_comparators(string &s)
 vector <string> get_all_options()
 {
     vector<string> options;
-    options.push_back("auto switch");
-    options.push_back("easy unequip");
-    options.push_back("equip unequip");
-    options.push_back("warn hatches");
-    options.push_back("auto hide spells");
-    options.push_back("show more");
-    options.push_back("bold brightens foreground");
-    options.push_back("cloud status");
-    options.push_back("launcher autoquiver");
-    options.push_back("sounds on");
-    options.push_back("no save");
-    //create map of strings ints
+    options.push_back("Auto switch");
+    options.push_back("Easy unequip");
+    options.push_back("Equip unequip");
+    options.push_back("Warn hatches");
+    options.push_back("Auto hide spells");
+    options.push_back("Show more");
+    options.push_back("Bold brightens foreground");
+    options.push_back("Cloud status");
+    options.push_back("Launcher autoquiver");
+    options.push_back("Sounds on");
+    options.push_back("No save");
+
     return options; // vector of strings
-} // disp_sub_menu()
+} // get_all_options()
 
 
 // options menu
 void disp_options()
 {
     // sub menus to be displayed
-    vector<string> options_list; // = getAllOptions();
-    options_list.push_back("auto_switch");
+    vector<string> options_list = get_all_options();
 
     // if things go wrong
     if (options_list.empty())
@@ -5509,20 +5508,10 @@ void disp_options()
             ASSERT(sel[0]->hotkeys.size() == 1);
 
             string key = *((string*) sel[0]->data);
-            string answer = "SHEESHH";
-            
-            // toggle option
-            Options.auto_switch = !(Options.auto_switch);
-            // let user know
-            (Options.auto_switch) ? mpr("Auto switch on") : mpr("Auto switch off");
+            string answer = toggle_option(key);
 
             show_description(answer);
         }
     }
     return;
-    //     // auto_switch
-    //     case 1:
-    //         
-
-    //         break;
 } // options menu
