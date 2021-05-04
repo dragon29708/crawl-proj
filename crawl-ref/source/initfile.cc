@@ -5446,45 +5446,22 @@ void menu_sort_condition::set_comparators(string &s)
 
 
 // creates a submenu for a set of options
-void disp_sub_menu(map<int, string> sub_menu_options, string sub_menu_name)
+vector <string> get_all_options()
 {
-    if (sub_menu_options.empty())
-    {
-        mpr("Sorry. Cannot display options!");
-        return;
-    }
-    Menu sub_menu(MF_SINGLESELECT | MF_ANYPRINTABLE | MF_ALLOW_FORMATTING);
-    MenuEntry *title = new MenuEntry(sub_menu_name);
-    title->colour = YELLOW;
-    sub_menu.set_title(title);
-
-    for (map<int, string>::iterator it = sub_menu_options.begin(); it != sub_menu_options.end(); it++)
-    {
-        const char letter = index_to_letter(it->first);
-        string entry = it->second;
-        trim_string_right(entry);
-        MenuEntry *me = new MenuEntry(entry, MEL_ITEM, 1, letter);
-        me->data = (void *)&it->first;
-        sub_menu.add_entry(me);
-    }
-
-    while (true)
-    {
-        vector<MenuEntry*> sel = sub_menu.show();
-        if (sel.empty())
-            return;
-        else
-        {
-            ASSERT(sel.size() == 1);
-            ASSERT(sel[0]->hotkeys.size() == 1);
-
-            string key = *((string*) sel[0]->data);
-            string answer = "SHEESSHHH";
-            show_description(answer);
-        }
-    }
-
-    return;
+    vector<string> options;
+    options.push_back("auto switch");
+    options.push_back("easy unequip");
+    options.push_back("equip unequip");
+    options.push_back("warn hatches");
+    options.push_back("auto hide spells");
+    options.push_back("show more");
+    options.push_back("bold brightens foreground");
+    options.push_back("cloud status");
+    options.push_back("launcher autoquiver");
+    options.push_back("sounds on");
+    options.push_back("no save");
+    //create map of strings ints
+    return options; // vector of strings
 } // disp_sub_menu()
 
 
