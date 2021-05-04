@@ -5444,7 +5444,121 @@ void menu_sort_condition::set_comparators(string &s)
         s.empty() ? "equipped, basename, qualname, curse, qty" : s);
 }
 
+string toggle_option(string key) { // heres your if statement you monster
+    string answer = "error";
 
+    if (key == "Auto switch"){
+        Options.auto_switch = !Options.auto_switch;
+        if (!Options.auto_switch){
+            answer =  "Auto switch is false";
+        }  
+        else {
+            answer =  "Auto switch is true";
+        }
+    }
+    else if (key == "Easy unequip"){
+        Options.easy_unequip = !Options.easy_unequip;
+        if (!Options.easy_unequip){
+            answer = "Easy unequip is false";
+        }  
+        else{
+            answer = "Easy unequip is true";
+        }
+
+    }
+    else if (key == "Pickup thrown"){
+        Options.pickup_thrown = !Options.pickup_thrown;
+        if (!Options.pickup_thrown){
+            answer = "Pickup thrown is false";
+        }  
+        else{
+            answer = "Pickup thrown is true";
+        }
+    }
+    else if (key == "Warn hatches"){
+        Options.warn_hatches = !Options.warn_hatches;
+        if (!Options.warn_hatches){
+            answer = "Warn hatches is false";
+        }  
+        else{
+            answer = "Warn hatches is true";
+        }
+
+    }
+    else if (key == "Auto hide spells"){
+        Options.auto_hide_spells = !Options.auto_hide_spells;
+        if (!Options.auto_hide_spells){
+            answer = "Auto hide spells is false";
+        }  
+        else{
+            answer = "Auto hide spells is true";
+        }
+
+    }
+    else if (key == "Show more"){
+        Options.show_more = !Options.show_more;
+        if (!Options.show_more){
+            answer = "Show more is false";
+        }  
+        else{
+            answer = "Show more is true";
+        }
+
+    }
+    else if (key == "Bold brightens foreground"){
+        Options.bold_brightens_foreground = !Options.bold_brightens_foreground;
+        if (!Options.bold_brightens_foreground){
+            answer = "Bold brightens foreground is false";
+        }  
+        else{
+            answer = "Bold brightens foreground is true";
+        }
+
+    }
+    else if (key == "Cloud status"){
+        Options.cloud_status = !Options.cloud_status;
+        if (!Options.cloud_status){
+            answer = "Cloud status is false";
+        }  
+        else{
+            answer = "Cloud status is true";
+        }
+
+    }
+    else if (key == "Launcher autoquiver"){
+        Options.launcher_autoquiver = !Options.launcher_autoquiver;
+        if (!Options.launcher_autoquiver){
+            answer = "Launcher autoquiver is false";
+        }  
+        else{
+            answer = "Launcher autoquiver is true";
+        }
+
+    }
+    else if (key == "Sounds on"){
+        Options.sounds_on = !Options.sounds_on;
+        if (!Options.sounds_on){
+            answer = "Sounds on is false";
+        }  
+        else{
+            answer = "Sounds on is true";
+        }
+
+    }
+    else if (key == "No save"){
+        Options.no_save = !Options.no_save;
+        if (!Options.no_save){
+            answer = "No save is false";
+        }  
+        else{
+            answer = "No save is true";
+        }
+
+    }
+    return answer;
+
+
+}
 // creates a submenu for a set of options
 vector <string> get_all_options()
 {
